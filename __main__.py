@@ -1,1 +1,3 @@
-ok = 75
+"""
+Projet Fire Emblem
+"""
