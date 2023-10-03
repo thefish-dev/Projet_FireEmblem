@@ -2,7 +2,7 @@ from .Player import Player
 from .Attack import Attack
 
 class Unit:
-    def __init__(self, name: str, unitType: str, maxHealth: int, attacks: list, maxDistance: int, abilities: (list or None), properties: (list or None)):
+    def __init__(self, name: str, unitType: str, maxHealth: int, maxDistance: int, attacks: list, abilities: (list or None), properties: (list or None)):
         self.name = name
         self.type = unitType
         self.__maxHealth = maxHealth
