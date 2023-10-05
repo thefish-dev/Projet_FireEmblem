@@ -11,7 +11,7 @@ class Unit:
         self.properties = properties
         self.maxDistance = maxDistance
 
-        self.health = self.maxHealth
+        self.health = self.__maxHealth
 
     def SetParent(self, parent: Player):
         self.parent = parent
@@ -31,4 +31,13 @@ class Unit:
         unit.ModifyHealth(attack.damages)
         ans1 = f"{unit.name} has been attacked and received {attack.damages} damages."
         ans2 = f"{unit.name} has been killed."
-        print(ans1 if unit.IsAlive() else ans2)        
+        print(ans1 if unit.IsAlive() else ans2)     
+        
+    def GetPower(self):
+        power = 0
+        medium = 0
+        for attack in self.attacks:
+               power += attack.damages
+               medium += 1
+        return power // medium
+        

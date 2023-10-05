@@ -2,22 +2,43 @@
 Projet Fire Emblem
 """
 
+from os import system
 from packages import *
+
+clear = lambda: system("cls")
+
 
 Characters = [
     Character("Char1", [
-        Unit("Unit1", "Water", 100, 5, [
+        Unit("Unit1", "Water", 80, 5, [
             Attack("Attack1", "This is attack 1", 10),
             Attack("Attack2", "This is attack 2", 10),
         ],
-        [
-            Ability("Ability1", "This is ability 1"),
-            Ability("Ability2", "This is ability 2"),
+            Ability("Heal", "CanHeal"), 
+            None
+        ),
+        Unit("Unit2", "Fire", 100, 5, [
+            Attack("Attack1", "This is attack 1", 15),
+            Attack("Attack2", "This is attack 2", 20),
         ],
-        [
-            Property("Property1", "This is property 1"),
-            Property("Property2", "This is property 2"),
+            None, 
+            None
+        )
+    ]),
+    Character("Char2", [
+        Unit("Unit3", "Earth", 110, 5, [
+            Attack("Attack1", "This is attack 1", 10),
+            Attack("Attack2", "This is attack 2", 10),
         ],
+            None, 
+            None
+        ),
+        Unit("Unit4", "Air", 60, 5, [
+            Attack("Attack1", "This is attack 1", 15),
+            Attack("Attack2", "This is attack 2", 20),
+        ],
+            None, 
+            None
         )
     ])
 ]
@@ -25,27 +46,53 @@ Characters = [
 
 
 def chooseUsername(player):
+    clear()
     name = input(f"Player {player}, choose a username: ")
     while True:
-        user = input("Do you confirm ? y/n")
+        user = input("Do you confirm ? y/n : ")
         if user == "y":
             return name
         elif user == "n":
-            chooseUsername(player)
+            break
         else:
+            clear()
             print("Invalid input, 'y' or 'n' expected")
             
-name1 = chooseUsername("A")
-name2 = chooseUsername("B")
+    chooseUsername(player)
 
 def chooseCharacter(player):
-    for char in 
-    character = input(f"Player {player}, choose a character: ")
+    clear()
+    for i in range(len(Characters)):
+        print(f"{i+1} - {Characters[i].name} has the following units:")
+        for unit in Characters[i].units:
+            print(f"{unit.name} - Health: {unit.health} | Power: {unit.GetPower()}")
+        
+    character = None    
     while True:
-        user = input("Do you confirm ? y/n")
+        try:
+            character = int(input(f"Player {player}, choose a character: "))
+        except: print(f"Must be a number between 1 and {len(Characters)}")
+        else: break
+        
+    while True:
+        user = input("Do you confirm ? y/n : ")
         if user == "y":
-            return character
+            return Characters[character-1]
         elif user == "n":
-            chooseUsername(player)
+            break
         else:
+            clear()
             print("Invalid input, 'y' or 'n' expected")
+        
+    chooseCharacter(player)
+            
+            
+name1 = chooseUsername("A")
+char1 = chooseCharacter("A")
+name2 = chooseUsername("B")
+char2 = chooseCharacter("B")
+
+clear()
+
+print(name1)
+print(char1.name)
