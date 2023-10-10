@@ -110,5 +110,25 @@ while True:
 clear()
 
 # Recusrive function to let the player choose what action to do
-def playerChoice(player, num):
-    ...
+# If num == 0: first try, every choice possible
+# If num == 1: player moved, he can do everything but move
+# If num == 2: player did something impossible, he has to restart
+def playerChoice(char, num):
+    if num == 2: print("\nYou have to input your informations again, this is probably due to the fact that you tryed to accomplish something impossible.")
+    if num != 1:
+        global selectedUnit
+        while True:
+            try: # We want to make sure to get a valid input.
+                units = char.units
+                print("\nSelect a unit")  
+                for i in range(len(units)):
+                    print(f"{i+1} - {units[i].name}")
+                selectedUnit = units[int(input("Enter a number: "))-1]
+            except: print("No unit associated to this number") # User inputed something incorrect
+            else: break
+    
+
+
+while True:
+    playerChoice(char1,0)
+    break
