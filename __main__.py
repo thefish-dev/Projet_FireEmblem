@@ -92,8 +92,20 @@ def chooseCharacter(player):
 # Initialization of the 2 users ( PVP )
 name1 = chooseUsername("A")
 char1 = chooseCharacter("A")
-name2 = chooseUsername("B")
-char2 = chooseCharacter("B")
+
+while True: # loop to make sure the Player B doesn't choose the same username
+    name2 = chooseUsername("B")
+    if name2 == name1:
+        print("You can't have the same username as Player A")
+    else:
+        break
+    
+while True:
+    char2 = chooseCharacter("B")
+    if char2 == char1:
+        print("You can't have the same character as Player A")
+    else:
+        break
 
 clear()
 
