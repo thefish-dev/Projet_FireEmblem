@@ -1,28 +1,29 @@
-class File:
+from random import shuffle
+class File_dattente:
     
-    def __init__(self, content: list):
-        self.content = content
+    def __init__(self, n: int,file=[]):
+        self.n=n
+        self.file=File(self.ouverture(n))
+        self.numero=1
+        while not self.file.est_vide():
+            self.passage()
+    def __str__(self) :
+        return str(self.file)
     
-    def est_vide(self):
-        return self.content == []
+    def ouverture(self, n: int):
+        l=[]
+        for i in range (1,n+1) :
+            l.append(i)
+        shuffle(l)
+        return l
     
-    def __str__(self):
-        return str(self.content)
-    
-    def enfiler(self, element):
-        self.content.insert(0, element)
-            
-    def regarder_tete(self):
-        old = self.defiler()
-        print(old)
-        self.enfiler(old)
-    
-    def defiler(self):
-        if not self.est_vide(): return self.content.pop(-1)
-        else: return None
-    
-    def inverser(self):
-        if not self.est_vide():
-            element = self.defiler()
-            self.inverser()
-            self.enfiler(element)
+    def passage(self):
+        
+        a=self.file.defiler()
+        if a==self.numero :
+            self.numero+=1
+        
+        else :
+            self.file.enfiler(a)
+                    
+                    
