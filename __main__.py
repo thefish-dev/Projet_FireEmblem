@@ -64,18 +64,20 @@ def chooseUsername(player):
 
 # Recursive function to let the user choose a character in the Characters list.
 def chooseCharacter(player):
-    clear()
     for i in range(len(Characters)): # loop through the Characters list
         print(f"{i+1} - {Characters[i].name} has the following units:")
         for unit in Characters[i].units: # loop though it's units
             print(f"{unit.name} - Health: {unit.health} | Power: {unit.GetPower()}") # Unit name, unit health and unit power (an average of every attack damages)
         
-    character = None    
-    while True: # loop to make sure the user input a valid number
-        try:
-            character = int(input(f"Player {player}, choose a character: "))
-        except: print(f"Must be a number between 1 and {len(Characters)}")
-        else: break
+    character = None
+
+    while True:
+        character = int(input(f"Player {player}, choose a character: "))
+
+        if character-1 > len(Characters):
+            print(f"Must be a number between 1 and {len(Characters)}")
+        else:
+            break
         
     while True:
         user = input("Do you confirm ? y/n : ")
@@ -127,8 +129,6 @@ def playerChoice(char, num):
             except: print("No unit associated to this number") # User inputed something incorrect
             else: break
     
-
-
 while True:
     playerChoice(char1,0)
     break
