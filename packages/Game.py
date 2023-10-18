@@ -7,7 +7,6 @@ class Game:
         for i in range(len(self.grid)) :
             print(self.grid[i])
 
-
     def KnowPosition(self) :
         for i in range (len(self.grid)) :
             for j in range(len(self.grid[i])) :
