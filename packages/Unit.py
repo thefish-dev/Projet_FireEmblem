@@ -2,7 +2,7 @@ from .Player import Player
 from .Attack import Attack
 
 class Unit:
-    def __init__(self, name: str, unitType: str, maxHealth: int, maxDistance: int, attacks: list, abilities: (list or None), properties: (list or None)):
+    def __init__(self, name: str, unitType: str, maxHealth: int, maxDistance: int, attacks: list, abilities: (list or None), properties: (list or None), initPosition: tuple):
         self.name = name
         self.type = unitType
         self.__maxHealth = maxHealth
@@ -10,8 +10,12 @@ class Unit:
         self.abilities = abilities
         self.properties = properties
         self.maxDistance = maxDistance
+        self.initPosition = initPosition
 
         self.health = self.__maxHealth
+
+    def __str__(self):
+        return self.name
 
     def SetParent(self, parent: Player):
         self.parent = parent

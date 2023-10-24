@@ -17,14 +17,16 @@ Characters = [
         [ # list of Ability instances
             Ability("Heal", "CanHeal")
         ], 
-            None # list of Property instances, None for this unit.
+            None, # list of Property instances, None for this unit.
+            (0,0)
         ),
         Unit("Unit2", "Fire", 100, 5, [
             Attack("Attack1", "This is attack 1", 15),
             Attack("Attack2", "This is attack 2", 20),
         ],
             None, 
-            None
+            None,
+            (0,9)
         )
     ]),
     Character("Char2", [
@@ -33,14 +35,16 @@ Characters = [
             Attack("Attack2", "This is attack 2", 10),
         ],
             None, 
-            None
+            None,
+            (9,0)
         ),
         Unit("Unit4", "Air", 60, 5, [
             Attack("Attack1", "This is attack 1", 15),
             Attack("Attack2", "This is attack 2", 20),
         ],
             None, 
-            None
+            None,
+            (9,9)
         )
     ])
 ]
@@ -50,17 +54,7 @@ Characters = [
 def chooseUsername(player):
     clear() # lambda function to clear the console using os.system('cls')
     name = input(f"Player {player}, choose a username: ")
-    while True: # repeat until valid input ('y' or 'n')
-        user = input("Do you confirm ? y/n : ")
-        if user == "y":
-            return name
-        elif user == "n": # if the user wants to choose another name
-            break
-        else:
-            clear()
-            print("Invalid input, 'y' or 'n' expected")
-            
-    chooseUsername(player)
+    return name
 
 # Recursive function to let the user choose a character in the Characters list.
 def chooseCharacter(player):
@@ -78,18 +72,8 @@ def chooseCharacter(player):
             print(f"Must be a number between 1 and {len(Characters)}")
         else:
             break
-        
-    while True:
-        user = input("Do you confirm ? y/n : ")
-        if user == "y":
-            return Characters[character-1]
-        elif user == "n":
-            break
-        else:
-            clear()
-            print("Invalid input, 'y' or 'n' expected")
-        
-    chooseCharacter(player)
+
+    return Characters[character-1]
 
 # Initialization of the 2 users ( PVP )
 name1 = chooseUsername("A")
@@ -101,7 +85,6 @@ while True: # loop to make sure the Player B doesn't choose the same username
         print("You can't have the same username as Player A")
     else:
         break
-    
 while True:
     char2 = chooseCharacter("B")
     if char2 == char1:
@@ -145,6 +128,15 @@ def playerChoice(char, num):
             else: break
 
 game = Game(10)
-while True:
+game.Affichage()
+for unit in char1.units:
+    game.PlaceUnit(unit, unit.initPosition)
+    print(game.KnowPosition(unit))
+for unit in char2.units:
+    game.PlaceUnit(unit, unit.initPosition)
+    print(game.KnowPosition(unit))
+game.Affichage()
+
+while False:
     playerChoice(char1,0)
     break
