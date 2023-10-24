@@ -5,7 +5,7 @@ pygame.init()
 
 
 screen = pygame.display.set_mode([800, 800])
-
+picture=pygame.image.load('Image/Cadrillage')
 
 running = True
 while running:
