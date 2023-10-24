@@ -1,4 +1,4 @@
-from pygame import *
+from Pygame import *
 
 import pygame
 pygame.init()
@@ -17,12 +17,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     
-    screen.fill((255, 255, 255))
-    picture.blit(picture_use,(0,0))
-           
-
     
-   
     
     pygame.display.flip()
 
