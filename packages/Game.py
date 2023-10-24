@@ -1,7 +1,7 @@
 from math import *
 class Game:
     def __init__(self, size:int):
-        self.grid = [ [' ' for i in range (size[0])] * size[1] ]
+        self.grid = [ [' ' for _ in range (size)] for _ in range (size) ]
         
     def Affichage(self) :
         for i in range(len(self.grid)) :

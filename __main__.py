@@ -90,7 +90,7 @@ def chooseCharacter(player):
             print("Invalid input, 'y' or 'n' expected")
         
     chooseCharacter(player)
-            
+
 # Initialization of the 2 users ( PVP )
 name1 = chooseUsername("A")
 char1 = chooseCharacter("A")
@@ -136,15 +136,15 @@ def playerChoice(char, num):
                     actions["Abilitiy"] = selectedUnit.abilities
                 if selectedUnit.attacks:
                     actions["Attack"] = selectedUnit.attacks
-                    
-
+                actions["Move"] = Game
                 print("\nSelect a unit")  
                 for i in range(len(units)):
                     print(f"{i+1} - {units[i].name}")
                 selectedUnit = units[int(input("Enter a number: "))-1]
             except: print("No unit associated to this number") # User inputed something incorrect
             else: break
-    
+
+game = Game(10)
 while True:
     playerChoice(char1,0)
     break
