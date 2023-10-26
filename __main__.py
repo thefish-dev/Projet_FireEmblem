@@ -124,14 +124,6 @@ def playerChoice(char, num):
             else: break
 
 game = Game(10)
-game.Affichage()
-for unit in char1.units:
-    game.PlaceUnit(unit, unit.initPosition)
-    print(game.KnowPosition(unit))
-for unit in char2.units:
-    game.PlaceUnit(unit, unit.initPosition)
-    print(game.KnowPosition(unit))
-game.Affichage()
 
 while False:
     playerChoice(char1,0)
