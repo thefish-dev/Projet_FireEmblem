@@ -18,7 +18,6 @@ Characters = [
             Ability("Heal", "CanHeal")
         ], 
             None, # list of Property instances, None for this unit.
-            (0,0)
         ),
         Unit("Unit2", "Fire", 100, 5, [
             Attack("Attack1", "This is attack 1", 15),
@@ -26,7 +25,6 @@ Characters = [
         ],
             None, 
             None,
-            (0,9)
         )
     ]),
     Character("Char2", [
@@ -36,7 +34,6 @@ Characters = [
         ],
             None, 
             None,
-            (9,0)
         ),
         Unit("Unit4", "Air", 60, 5, [
             Attack("Attack1", "This is attack 1", 15),
@@ -44,7 +41,6 @@ Characters = [
         ],
             None, 
             None,
-            (9,9)
         )
     ])
 ]
@@ -128,15 +124,6 @@ def playerChoice(char, num):
             else: break
 
 game = Game(10)
-game.Affichage()
-for unit in char1.units:
-    game.PlaceUnit(unit, unit.initPosition)
-    print(game.KnowPosition(unit))
-for unit in char2.units:
-    game.PlaceUnit(unit, unit.initPosition)
-    print(game.KnowPosition(unit))
-game.Affichage()
-
 
 while False:
     playerChoice(char1,0)
