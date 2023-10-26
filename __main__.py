@@ -137,6 +137,7 @@ for unit in char2.units:
     print(game.KnowPosition(unit))
 game.Affichage()
 
+
 while False:
     playerChoice(char1,0)
     break
