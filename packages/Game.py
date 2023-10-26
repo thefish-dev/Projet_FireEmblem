@@ -24,8 +24,18 @@ class Game:
         
     def PlaceUnit(self, unit: Unit, position: tuple):
         self.grid[position[0]][position[1]] = unit
+
+    def IsThereSomething(self, position: tuple):
+        for x in range(self.size):
+            for y in range(self.size):
+                if self.grid[x][y] != ' ' and (x,y) == position:
+                    return True
+        return False
         
     def MoveUnit(self, unit: Unit, position: tuple):
         if self.Distance(self.KnowPosition(),position) <= unit.maxDistance :
             self.grid[position[0]][position[1]] = unit 
+            return True
+        else:
+            return False
         

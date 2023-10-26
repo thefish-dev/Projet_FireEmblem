@@ -31,16 +31,19 @@ class Unit:
     def IsAlive(self):
         return self.health > 0
     
-    def Attack(self, unit, attack: Attack):
-        unit.ModifyHealth(attack.damages)
-        ans1 = f"{unit.name} has been attacked and received {attack.damages} damages."
-        ans2 = f"{unit.name} has been killed."
-        print(ans1 if unit.IsAlive() else ans2)   
+    def Attack(self, target, attack: Attack):
+        target.ModifyHealth(attack.damages)
+        ans1 = f"{target.name} has been attacked and received {attack.damages} damages."
+        ans2 = f"{target.name} has been killed."
+        print(ans1 if target.IsAlive() else ans2)   
 
     def UseAbility(self, unit, ability: Ability):
         
         ...  
         
+    def GetHealthPercent(self):
+        return (self.health / self.__maxHealth).__round__()
+
     def GetPower(self):
         power = 0
         medium = 0
