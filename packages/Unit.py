@@ -1,5 +1,6 @@
 from .Player import Player
 from .Attack import Attack
+from .Ability import Ability
 
 class Unit:
     def __init__(self, name: str, unitType: str, maxHealth: int, maxDistance: int, attacks: list, abilities: (list or None), properties: (list or None)):
@@ -34,7 +35,11 @@ class Unit:
         unit.ModifyHealth(attack.damages)
         ans1 = f"{unit.name} has been attacked and received {attack.damages} damages."
         ans2 = f"{unit.name} has been killed."
-        print(ans1 if unit.IsAlive() else ans2)     
+        print(ans1 if unit.IsAlive() else ans2)   
+
+    def UseAbility(self, unit, ability: Ability):
+        
+        ...  
         
     def GetPower(self):
         power = 0

@@ -8,43 +8,7 @@ from packages import * # Every classes in the folder ./packages
 clear = lambda: system("cls") # Simple command to clear the console, can be used like so: clear()
 
 # Characters list containing instances of class Character
-Characters = [
-    Character("Char1", [ # list of Unit instances
-        Unit("Unit1", "Water", 80, 5, [ # list of Attack instances
-            Attack("Attack1", "This is attack 1", 10),
-            Attack("Attack2", "This is attack 2", 10),
-        ],
-        [ # list of Ability instances
-            Ability("Heal", "CanHeal")
-        ], 
-            None, # list of Property instances, None for this unit.
-        ),
-        Unit("Unit2", "Fire", 100, 5, [
-            Attack("Attack1", "This is attack 1", 15),
-            Attack("Attack2", "This is attack 2", 20),
-        ],
-            None, 
-            None,
-        )
-    ]),
-    Character("Char2", [
-        Unit("Unit3", "Earth", 110, 5, [
-            Attack("Attack1", "This is attack 1", 10),
-            Attack("Attack2", "This is attack 2", 10),
-        ],
-            None, 
-            None,
-        ),
-        Unit("Unit4", "Air", 60, 5, [
-            Attack("Attack1", "This is attack 1", 15),
-            Attack("Attack2", "This is attack 2", 20),
-        ],
-            None, 
-            None,
-        )
-    ])
-]
-
+from Characters import Characters
 
 # Recursive function to let the user choose a name.
 def chooseUsername(player):
@@ -71,6 +35,11 @@ def chooseCharacter(player):
 
     return Characters[character-1]
 
+def placeUnitStartPosition(player):
+    clear()
+    print("Choose where to place each unit")
+    
+
 # Initialization of the 2 users ( PVP )
 name1 = chooseUsername("A")
 char1 = chooseCharacter("A")
@@ -95,10 +64,11 @@ clear()
 # If num == 1: player moved, he can do everything but move
 # If num == 2: player did something impossible, he has to restart
 def playerChoice(char, num):
+    global selectedUnit, selectedAction, selectedSubAction, selectedTarget
     if num == 2: print("\nYou have to input your informations again, this is probably due to the fact that you tryed to accomplish something impossible.")
     if num != 1:
-        global selectedUnit
-        while True:
+        choosing = True
+        while choosing:
             try: # We want to make sure to get a valid input.
                 units = char.units
                 print("\nSelect a unit")  
@@ -106,25 +76,47 @@ def playerChoice(char, num):
                     print(f"{i+1} - {units[i].name}")
                 selectedUnit = units[int(input("Enter a number: "))-1]
             except: print("No unit associated to this number") # User inputed something incorrect
-            else: break
+            else: choosing = False
             
-        while True:
-            try: # We want to make sure to get a valid input.
-                actions = {}
-                if selectedUnit.abilities:
-                    actions["Abilitiy"] = selectedUnit.abilities
-                if selectedUnit.attacks:
-                    actions["Attack"] = selectedUnit.attacks
-                actions["Move"] = Game
-                print("\nSelect a unit")  
-                for i in range(len(units)):
-                    print(f"{i+1} - {units[i].name}")
-                selectedUnit = units[int(input("Enter a number: "))-1]
-            except: print("No unit associated to this number") # User inputed something incorrect
-            else: break
+    choosing = True
+    while choosing:
+        try:
+            actions = ["Move"]
+            if num == 1:
+                actions.pop(0)
+            if selectedUnit.attacks:
+                actions += ["Attack"]
+            if selectedUnit.abilities:
+                actions += ["Ability"]
+
+            print("\nSelect an action: ")  
+            for i in range(len(actions)):
+                print(f"{i+1} - {actions[i]}")
+            selectedAction = actions[int(input("Enter a number: "))-1]
+        except: print("No action associated to this number")
+        else: choosing = False
+
+    choosing = True
+    while choosing:
+        try:
+            if selectedAction == "Attack":
+                selectedSubAction = selectedUnit.Attack
+            elif selectedAction == "Ability":
+                selectedSubAction = selectedUnit.UseAbility
+
+
+            print("\nSelect an action: ")  
+            for i in range(len(actions)):
+                print(f"{i+1} - {actions[i]}")
+            selectedAction = actions[int(input("Enter a number: "))-1]
+        except: print("No action associated to this number")
+        else: choosing = False
+
+
 
 game = Game(10)
-
-while False:
+playing = True
+while playing:
     playerChoice(char1,0)
+    print(selectedUnit, selectedAction)
     break
