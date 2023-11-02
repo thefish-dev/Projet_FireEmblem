@@ -1,17 +1,21 @@
 from math import *
 from packages import Unit
+from termcolor import colored
 
 class Game:
     def __init__(self, size: int):
         self.size = size
-        self.grid = [ [' ' for _ in range (size)] for _ in range (size) ]
+        self.grid = [ [None for _ in range (size)] for _ in range (size) ]
         
     def Affichage(self) :
         print("")
         clone = self.grid.copy()
         for line in clone:
-            for e in line: line[line.index(e)] = str(e)
-            print(line)
+            for e in line: 
+                if type(line[line.index(e)]) == Unit:
+                    line[line.index(e)] = colored(str(e), e.team)
+                
+            print(" | ".join(line))
 
     def KnowPosition(self, unit: Unit) :
         for x in range(self.size):
@@ -30,12 +34,14 @@ class Game:
     def IsThereSomething(self, position: tuple):
         for x in range(self.size):
             for y in range(self.size):
-                if self.grid[x][y] != ' ' and (x,y) == position:
+                if self.grid[x][y] != None and (x,y) == position:
                     return True
         return False
         
     def MoveUnit(self, unit: Unit, position: tuple):
-        if self.Distance(self.KnowPosition(unit), position) <= unit.maxDistance :
+        currentPos = self.KnowPosition()
+        if self.Distance(currentPos, position) <= unit.maxDistance :
+            self.grid[currentPos[0]][currentPos[1]] = None
             self.grid[position[0]][position[1]] = unit 
             return True
         else:

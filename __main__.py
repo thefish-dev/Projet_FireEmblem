@@ -68,6 +68,8 @@ def placeUnitStartPosition(player, char):
 # Initialization of the 2 users ( PVP )
 name1 = chooseUsername("A")
 char1 = chooseCharacter("A")
+for unit in char1.units:
+    unit.SetTeam("blue")
 placeUnitStartPosition("A", char1)
 
 while True: # loop to make sure the Player B doesn't choose the same username
@@ -83,6 +85,8 @@ while True:
     else:
         break
 placeUnitStartPosition("B", char2)
+for unit in char2.units:
+    unit.SetTeam("red")
 
 # Recusrive function to let the player choose what action to do
 # If num == 0: first try, every choice possible
@@ -128,28 +132,29 @@ def playerChoice(char, enemy, num):
     while choosing:
         if selectedAction == "Attack":
 
-            selectedAttack = selectedUnit.attacks
-            print("\nSelect an attack: ")  
+            attacks = selectedUnit.attacks
+            print("\nSelect an attack:")
             try:
-                for i in range(len(selectedAttack)):
-                    print(f"{i+1} - {selectedAttack[i].name} - {selectedAttack[i].desc} - {selectedAttack[i].damages} Damages")
-                selectedAttack = units[int(input("Enter a number: "))-1]
+                for i in range(len(attacks)):
+                    print(f"{i+1} - {attacks[i].name} - {attacks[i].desc} - {attacks[i].damages} Damages")
+                selectedAttack = attacks[int(input("Enter a number: "))-1]
             except: print("No attack associated to this number")
             else: choosing = False
 
         elif selectedAction == "Ability":
 
-            selectedAbility = selectedUnit.abilities
-            print("\nSelect an ability: ")
+            abilities = selectedUnit.abilities
+            print("\nSelect an ability:")
             try:
-                for i in range(len(selectedAbility)):
-                    print(f"{i+1} - {selectedAbility[i].name} - {selectedAbility[i].desc}")
-                selectedAbility = units[int(input("Enter a number: "))-1]
+                for i in range(len(abilities)):
+                    print(f"{i+1} - {abilities[i].name} - {abilities[i].desc}")
+                selectedAbility = abilities[int(input("Enter a number: "))-1]
             except: print("No ability associated to this number")
             else: choosing = False
 
         elif selectedAction == "Move":
 
+            selectedAction = None
             print(f"\nYour unit is at {game.KnowPosition(selectedUnit)} max distance is {selectedUnit.maxDistance}")
             sentence = "\nSelect a location (type \"x,y\" without the \"): "
             try:
@@ -161,8 +166,6 @@ def playerChoice(char, enemy, num):
 
             except: print("Invalid input, 2 numbers separated by a coma were expected")
             else: choosing = False; return playerChoice(char, enemy, 1)
-            
-        else: choosing = False; return playerChoice(char, enemy, 2)
 
     # Choosing a target (if needed)
     choosing = True
@@ -174,7 +177,7 @@ def playerChoice(char, enemy, num):
             try:
                 for i in range(len(targets)):
                     print(f"{i+1} - {targets[i].name} - {targets[i].GetHealthPercent()}% Health")
-                selectedTarget = units[int(input("Enter a number: "))-1]
+                selectedTarget = targets[int(input("Enter a number: "))-1]
             except: print("No target associated to this number")
             else: choosing = False
 
@@ -185,7 +188,7 @@ def playerChoice(char, enemy, num):
             try:
                 for i in range(len(targets)):
                     print(f"{i+1} - {targets[i].name} - {targets[i].GetHealthPercent()}% Health")
-                selectedTarget = units[int(input("Enter a number: "))-1]
+                selectedTarget = targets[int(input("Enter a number: "))-1]
             except: print("No target associated to this number")
             else: choosing = False
         
@@ -217,9 +220,10 @@ def displayFinalScore():
     for name in sorted(order):
         print(f"{name} - {order[name]}")
 
+clearConsole()
+
 playing = True
 while playing:
-    clearConsole()
 
     game.Affichage()
     playerChoice(char1, char2, 0)
@@ -230,12 +234,10 @@ while playing:
         print(f"\n{result.name} has won!\n")
         continue    
 
-    clearConsole()
-
     game.Affichage()
     playerChoice(char2, char1, 0)
     clearConsole()
-    result = executeRound(char1, char2) 
+    result = executeRound(char2, char1) 
     if result:
         playing = False
         print(f"\n{result.name} has won!\n")

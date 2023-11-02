@@ -16,13 +16,16 @@ class Unit:
     def __str__(self):
         return self.name
 
+    def SetTeam(self, team):
+        self.team = team
+
     def ModifyHealth(self, modification: int):
         if modification > self.__maxHealth:
             self.health = self.__maxHealth
         elif modification < 0:
             self.health = 0
         else:
-            self.health += modification
+            self.health -= modification
 
     def IsAlive(self):
         return self.health > 0
