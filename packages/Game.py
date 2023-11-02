@@ -8,14 +8,16 @@ class Game:
         
     def Affichage(self) :
         print("")
-        for line in self.grid:
+        clone = self.grid.copy()
+        for line in clone:
             for e in line: line[line.index(e)] = str(e)
             print(line)
 
     def KnowPosition(self, unit: Unit) :
         for x in range(self.size):
             for y in range(self.size):
-                if self.grid[x][y] == unit:
+                print(self.grid[x][y])
+                if self.grid[x][y] == unit or self.grid[x][y] == unit.name:
                     return (x,y)
 
     def Distance(self,position: tuple,position_voulue: tuple) :
@@ -33,7 +35,7 @@ class Game:
         return False
         
     def MoveUnit(self, unit: Unit, position: tuple):
-        if self.Distance(self.KnowPosition(),position) <= unit.maxDistance :
+        if self.Distance(self.KnowPosition(unit), position) <= unit.maxDistance :
             self.grid[position[0]][position[1]] = unit 
             return True
         else:

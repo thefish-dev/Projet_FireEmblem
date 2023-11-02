@@ -1,4 +1,3 @@
-from .Player import Player
 from .Attack import Attack
 from .Ability import Ability
 
@@ -16,9 +15,6 @@ class Unit:
 
     def __str__(self):
         return self.name
-
-    def SetParent(self, parent: Player):
-        self.parent = parent
 
     def ModifyHealth(self, modification: int):
         if modification > self.__maxHealth:
@@ -42,13 +38,13 @@ class Unit:
         ...  
         
     def GetHealthPercent(self):
-        return (self.health / self.__maxHealth).__round__()
+        return int(self.health / self.__maxHealth) * 100
 
     def GetPower(self):
         power = 0
         medium = 0
         for attack in self.attacks:
-               power += attack.damages
-               medium += 1
+            power += attack.damages
+            medium += 1
         return power // medium
         

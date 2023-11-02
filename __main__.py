@@ -5,7 +5,7 @@ Projet Fire Emblem
 from os import system
 from packages import * # Every classes in the folder ./packages
 
-clear = lambda: system("cls") # Simple command to clear the console, can be used like so: clear()
+clearConsole = lambda: system("cls") # Simple command to clear the console, can be used like so: clear()
 
 # Characters list containing instances of class Character
 from Characters import Characters
@@ -15,7 +15,7 @@ game = Game(10)
 
 # Recursive function to let the user choose a name.
 def chooseUsername(player):
-    clear() # lambda function to clear the console using os.system('cls')
+    clearConsole() # lambda function to clear the console using os.system('cls')
     name = input(f"Player {player}, choose a username: ")
     return name
 
@@ -39,7 +39,7 @@ def chooseCharacter(player):
     return Characters[character-1]
 
 def placeUnitStartPosition(player, char):
-    clear()
+    clearConsole()
     print(f"{char.name}, choose where to place each unit")
 
     for unit in char.units:
@@ -53,11 +53,8 @@ def placeUnitStartPosition(player, char):
             #try:
 
             location = tuple(input(sentence).split(','))
-            print(location[0],location[1])
             location = tuple([int(location[0]),int(location[1])])
-            print(location)
 
-            print(game.IsThereSomething(location) or not location[0] in x)
             if game.IsThereSomething(location) or not location[0] in x :
                 print(f"There is already something here or x position isn't between {x[0]} and {x[2]}")
             else:
@@ -87,14 +84,12 @@ while True:
         break
 placeUnitStartPosition("B", char2)
 
-clear()
-
 # Recusrive function to let the player choose what action to do
 # If num == 0: first try, every choice possible
 # If num == 1: player moved, he can do everything but move
 # If num == 2: player did something impossible, he has to restart
 def playerChoice(char, enemy, num):
-    global selectedUnit, selectedAction, selectedSubAction, selectedTarget
+    global selectedUnit, selectedAction, selectedAbility, selectedAttack, selectedTarget
 
     if num == 2: print("\nYou have to input your informations again, this is probably due to the fact that you tryed to accomplish something impossible.")
 
@@ -131,61 +126,118 @@ def playerChoice(char, enemy, num):
     # Choosing a sub action (what attack, what ability or what location to move to)
     choosing = True
     while choosing:
-            if selectedAction == "Attack":
+        if selectedAction == "Attack":
 
-                selectedSubAction = selectedUnit.Attack
-                print("\nSelect a target: ")  
+            selectedAttack = selectedUnit.attacks
+            print("\nSelect an attack: ")  
+            try:
+                for i in range(len(selectedAttack)):
+                    print(f"{i+1} - {selectedAttack[i].name} - {selectedAttack[i].desc} - {selectedAttack[i].damages} Damages")
+                selectedAttack = units[int(input("Enter a number: "))-1]
+            except: print("No attack associated to this number")
+            else: choosing = False
 
-                try:
+        elif selectedAction == "Ability":
 
-                    units = enemy.units
-                    for i in range(len(units)):
-                        print(f"{i+1} - {units[i].name} - {units[i].GetHealthPercent()}% Health")
-                    selectedTarget = units[int(input("Enter a number: "))-1]
+            selectedAbility = selectedUnit.abilities
+            print("\nSelect an ability: ")
+            try:
+                for i in range(len(selectedAbility)):
+                    print(f"{i+1} - {selectedAbility[i].name} - {selectedAbility[i].desc}")
+                selectedAbility = units[int(input("Enter a number: "))-1]
+            except: print("No ability associated to this number")
+            else: choosing = False
 
-                except: print("No target associated to this number")
-                else: choosing = False
+        elif selectedAction == "Move":
 
-            elif selectedAction == "Ability":
+            print(f"\nYour unit is at {game.KnowPosition(selectedUnit)} max distance is {selectedUnit.maxDistance}")
+            sentence = "\nSelect a location (type \"x,y\" without the \"): "
+            try:
+                location = tuple(input(sentence).split(','))
+                location = tuple([int(location[0]),int(location[1])])
 
-                selectedSubAction = selectedUnit.UseAbility
-                print("\nSelect a target: ")
+                if not game.MoveUnit(selectedUnit, location):
+                    print("This location is too far away")
 
-                try:
+            except: print("Invalid input, 2 numbers separated by a coma were expected")
+            else: choosing = False; return playerChoice(char, enemy, 1)
+            
+        else: choosing = False; return playerChoice(char, enemy, 2)
 
-                    units = char.units
-                    for i in range(len(units)):
-                        print(f"{i+1} - {units[i].name} - {units[i].GetHealthPercent()}% Health")
-                    selectedTarget = units[int(input("Enter a number: "))-1]
+    # Choosing a target (if needed)
+    choosing = True
+    while choosing:
+        if selectedAction == "Attack":
 
-                except: print("No target associated to this number")
-                else: choosing = False
+            targets = enemy.units
+            print("\nSelect a target: ")  
+            try:
+                for i in range(len(targets)):
+                    print(f"{i+1} - {targets[i].name} - {targets[i].GetHealthPercent()}% Health")
+                selectedTarget = units[int(input("Enter a number: "))-1]
+            except: print("No target associated to this number")
+            else: choosing = False
 
-            elif selectedAction == "Move":
-                print(f"\nYour unit is at {game.KnowPosition(selectedUnit)} max distance is {selectedUnit.maxDistance}")
-                sentence = "\nSelect a location (type \"x,y\" without the \"): "
-                try:
+        elif selectedAction == "Ability":
 
-                    location = tuple(input(sentence).split(','))
-                    location = tuple(int(location[0]),int(location[1]))
-                    print(location)
+            targets = char.units
+            print("\nSelect a target: ")
+            try:
+                for i in range(len(targets)):
+                    print(f"{i+1} - {targets[i].name} - {targets[i].GetHealthPercent()}% Health")
+                selectedTarget = units[int(input("Enter a number: "))-1]
+            except: print("No target associated to this number")
+            else: choosing = False
+        
+        else: choosing = False; return playerChoice(char, enemy, 2)
 
-                    if not game.MoveUnit(selectedUnit, location):
-                        print("This location is too far away")
+def executeRound(char: Character, enemy: Character):
+    if selectedAction == "Attack":
+        selectedUnit.Attack(selectedTarget, selectedAttack)
+    elif selectedAction == "Ability":
+        selectedUnit.UserAbility(selectedTarget, selectedAbility)
 
-                    playerChoice(char, enemy, 1)
+    if selectedTarget.IsAlive(): char.IncrementScore(1)
+    else: char.IncrementScore(2)
 
-                except: print("Invalid input, 2 numbers separated by a coma were expected")
-                else: choosing = False
+    if not char.CanPlay():
+        enemy.IncrementScore(5)
+        return enemy
+    
+    elif not enemy.CanPlay():
+        char.IncrementScore(5)
+        return char
+    
+    else:
+        return False
 
-            else:
-                ...
-
-
-
+def displayFinalScore():
+    print("Final Score:")
+    order = {name1:char1.GetScore(), name2:char2.GetScore()}
+    for name in sorted(order):
+        print(f"{name} - {order[name]}")
 
 playing = True
 while playing:
+    clearConsole()
+
+    game.Affichage()
     playerChoice(char1, char2, 0)
-    print(selectedUnit, selectedAction, selectedSubAction, selectedTarget)
-    break
+    clearConsole()
+    result = executeRound(char1, char2) 
+    if result:
+        playing = False
+        print(f"\n{result.name} has won!\n")
+        continue    
+
+    clearConsole()
+
+    game.Affichage()
+    playerChoice(char2, char1, 0)
+    clearConsole()
+    result = executeRound(char1, char2) 
+    if result:
+        playing = False
+        print(f"\n{result.name} has won!\n")
+
+displayFinalScore()
