@@ -7,7 +7,7 @@ Characters = [
             Attack("Attack2", "This is attack 2", 10),
         ],
         [ # list of Ability instances
-            Ability("Heal", "CanHeal", True)
+            Ability("Heal", "Can Heal", True)
         ], 
             None, # list of Property instances, None for this unit.
         ),

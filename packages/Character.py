@@ -6,11 +6,11 @@ class Character:
         self.units = units
         self.__score = 0
 
-    def IncrementScore(self, value: int):
+    def increment_score(self, value: int):
         self.__score += value
 
-    def GetScore(self):
+    def get_score(self):
         return self.__score
         
-    def CanPlay(self):
+    def can_play(self):
         return len(self.units) > 0

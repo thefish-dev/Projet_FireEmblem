@@ -1,6 +1,8 @@
 from .Attack import Attack
 from .Ability import Ability
 
+from random import randint
+
 class Unit:
     def __init__(self, name: str, unitType: str, maxHealth: int, maxDistance: int, attacks: list, abilities: (list or None), properties: (list or None)):
         self.name = name
@@ -16,34 +18,35 @@ class Unit:
     def __str__(self):
         return self.name
 
-    def SetTeam(self, team):
+    def set_team(self, team):
         self.team = team
 
-    def ModifyHealth(self, modification: int):
-        if modification > self.__maxHealth:
-            self.health = self.__maxHealth
-        elif modification < 0:
-            self.health = 0
-        else:
-            self.health -= modification
+    def modify_health(self, modification: int):
+        self.health -= modification
+        self.health = max(min(self.health, self.__maxHealth), 0) # Equivalent de clamp(valeur, min, max)
 
-    def IsAlive(self):
+    def is_alive(self):
         return self.health > 0
     
-    def Attack(self, target, attack: Attack):
-        target.ModifyHealth(attack.damages)
+    def attack(self, target, attack: Attack):
+        damages = attack.damages
+        if randint(0,1) <= attack.critic_damage_chance: 
+            damages *= attack.critic_damage_multiplier # Application du multiplicateur en fonction de sa probabilité
+
+        target.modify_health(damages)
         ans1 = f"{target.name} has been attacked and received {attack.damages} damages."
         ans2 = f"{target.name} has been killed."
-        print(ans1 if target.IsAlive() else ans2)   
+        print(target.health)
+        print(ans1 if target.is_alive() else ans2)   
 
-    def UseAbility(self, unit, ability: Ability):
+    def use_ability(self, unit, ability: Ability):
         
         ...  
         
-    def GetHealthPercent(self):
+    def get_health(self):
         return int(self.health / self.__maxHealth) * 100
 
-    def GetPower(self):
+    def get_power(self):
         power = 0
         medium = 0
         for attack in self.attacks:
