@@ -1,6 +1,5 @@
 from math import *
 from packages import Unit
-from termcolor import colored
 
 class Game:
     def __init__(self, size: int):
@@ -12,8 +11,7 @@ class Game:
         clone = self.grid.copy()
         for line in clone:
             for e in line: 
-                if type(line[line.index(e)]) == Unit:
-                    line[line.index(e)] = colored(str(e), e.team)
+                line[line.index(e)] = str(e)
                 
             print(" | ".join(line))
 
