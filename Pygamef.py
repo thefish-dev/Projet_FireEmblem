@@ -1,10 +1,11 @@
 from pygame import *
 
- 
+bleu=(0,255,255)
 background = display.set_mode((800,800))
 display.set_caption('Fire emblem')
 init()
-bleu=(0,0,255)
+
+
 demande=font.SysFont("monospace",20)
 image_text=demande.render('Déplacer vous avec les fléches', 1,bleu)
 
