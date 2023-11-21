@@ -32,13 +32,13 @@ while jouer:
     color = (255,0,0)
   
 # Drawing Rectangle
-    draw.rect(surface, color, Rect(50, 100, 100, 50))
+    draw.rect(surface, color, Rect(200, 430, 140, 70))
     for events in event.get():
          if events.type == QUIT:
              jouer=False
              quit()
     fenetre.blit(karim_bombe,(200,500))
     fenetre.blit(karim_mohamed,(260,500))
-    fenetre.blit(image_text_start,(200,50))
+    fenetre.blit(image_text_start,(100,100))
     
     display.flip()
