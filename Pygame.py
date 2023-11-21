@@ -4,7 +4,8 @@ from packages import*
 background = display.set_mode((800,800))
 display.set_caption('Fire emblem')
 init()
-<<<<<<< HEAD
+
+
 picture=image.load("./Images/Cadrillage.PNG")
 picture=picture.convert_alpha()
 picture=transform.scale(picture,(600,600))
@@ -62,8 +63,6 @@ class Karim :
 jouer = True
  
 joueur1=Karim(True)
-=======
-
 
  
 #les images
@@ -147,22 +146,7 @@ singe4=transform.scale(singe4, (50, 50))
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 jouer = True
- 
-
-
->>>>>>> 24549021e586ebc5b5b749fef7f619508cebf265
  
 while jouer:
    
@@ -170,7 +154,7 @@ while jouer:
          if events.type == QUIT:
              jouer=False
              quit()
-<<<<<<< HEAD
+             
     background.blit(picture,(100,100))
     if joueur1.yes_or_no==True :
         for i in range(len(joueur1.list_perso)) :
@@ -179,7 +163,6 @@ while jouer:
             
     
     
-=======
     background.blit(picture, (100,100))
     background.blit(arbre, (74,120))
     background.blit(rocher, (500,120))
@@ -195,6 +178,5 @@ while jouer:
     background.blit(singe3, (450,550))
     background.blit(singe4, (420,50))
    
->>>>>>> 24549021e586ebc5b5b749fef7f619508cebf265
     display.flip()
 quit()
