@@ -233,7 +233,7 @@ while playing:
 
     game.affichage()
     playerChoice(char1, char2, 0)
-    #clearConsole()
+    clearConsole()
     result = executeRound(char1, char2) 
     if result:
         playing = False
@@ -242,7 +242,7 @@ while playing:
 
     game.affichage()
     playerChoice(char2, char1, 0)
-    #clearConsole()
+    clearConsole()
     result = executeRound(char2, char1) 
     if result:
         playing = False

@@ -24,7 +24,9 @@ Characters = [
             Attack("Attack1", "This is attack 1", 10),
             Attack("Attack2", "This is attack 2", 10),
         ],
-            None, 
+        [
+            Ability("Heal", "Can Heal", True)
+        ], 
             None,
         ),
         Unit("Unit4", "Air", 60, 5, [
