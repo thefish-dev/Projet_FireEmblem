@@ -27,34 +27,33 @@ def game(rect:list) :
     noir=(0,0,0)
     blanc=(255,255,255)
     draw.rect(background,noir,[rect[0],rect[1],60,60])
-    while not K_KP_ENTER :
-       if K_RIGHT :
-           
-           draw.rect(background,blanc,[rect[0],rect[1],60,60])
-           rect[0]+=deplacement
-           if rect[0]>=700 :
-               rect[0]=700
-           draw.rect(background,noir,[rect[0],rect[1],60,60])
-       if K_LEFT :
-           draw.rect(background,blanc,[rect[0],rect[1],60,60])
-           rect[0]-=deplacement
-           if rect[0]<= 100 :
-               rect[0]=100
-           draw.rect(background,noir,[rect[0],rect[1],60,60]) 
-       if K_DOWN :
-           draw.rect(background,blanc,[rect[0],rect[1],60,60])
-           rect[1]+=deplacement
-           if rect[1]>=700 :
-               rect[1]=700
-           draw.rect(background,noir,[rect[0],rect[1],60,60])
-       if K_UP :
-           draw.rect(background,blanc,[rect[0],rect[1],60,60])
-           rect[1]-=deplacement
-           if rect[1]<=100 :
-               rect[1]
-           draw.rect(background,noir,[rect[0],rect[1],60,60]) 
-        
-           
+    for events in event.get():
+        if events.type==KEYDOWN :
+            if events.key == K_RIGHT :
+                draw.rect(background,blanc,[rect[0],rect[1],60,60])
+                rect[0]+=deplacement
+                if rect[0]>=700 :
+                    rect[0]=700
+                draw.rect(background,noir,[rect[0],rect[1],60,60])
+            if events.key == K_LEFT :
+                draw.rect(background,blanc,[rect[0],rect[1],60,60])
+                rect[0]-=deplacement
+                if rect[0]<= 100 :
+                    rect[0]=100
+                draw.rect(background,noir,[rect[0],rect[1],60,60]) 
+            if events.key == K_DOWN :
+                draw.rect(background,blanc,[rect[0],rect[1],60,60])
+                rect[1]+=deplacement
+                if rect[1]>=700 :
+                    rect[1]=700
+                draw.rect(background,noir,[rect[0],rect[1],60,60])
+            if events.key == K_UP :
+                draw.rect(background,blanc,[rect[0],rect[1],60,60])
+                rect[1]-=deplacement
+                if rect[1]<=100 :
+                    rect[1]
+                draw.rect(background,noir,[rect[0],rect[1],60,60]) 
+
 
 
 
@@ -132,13 +131,13 @@ joueur2_tour=False
 while jouer:
    
     for events in event.get():
-         if events.type == QUIT:
-             jouer=False
-             quit()
+        if events.type == QUIT or events.key == K_ESCAPE:
+            jouer=False
+            quit()
         
-         elif events.type==KEYDOWN :
-                if events.key==K_KP_ENTER :
-                    joueur1.position_bombe1=(200,600)
+        elif events.type==KEYDOWN :
+            if events.key==K_KP_ENTER :
+                joueur1.position_bombe1=(200,600)
 
 
     
@@ -146,6 +145,7 @@ while jouer:
     for i in range(10) :
         for j in range(10) :
             background.blit(carre,((100+j*60),(100+i*60)))
+            
     background.blit(image_text,(220,20))
     if joueur1.yes_or_no==True :
         for i in range(len(joueur1.list_perso)) :
