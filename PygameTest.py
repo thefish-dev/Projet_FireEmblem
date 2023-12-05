@@ -53,34 +53,6 @@ def game() :
         player_pos.x -= 300 * dt
     if keys[pygame.K_d]:
         player_pos.x += 300 * dt
-
-    """
-        if events.type==KEYDOWN :
-            if events.key == K_RIGHT :
-                pygame.draw.rect(background,blanc,[rect[0],rect[1],60,60])
-                rect[0]+=deplacement
-                if rect[0]>=700 :
-                    rect[0]=700
-                draw.rect(background,noir,[rect[0],rect[1],60,60])
-            if events.key == K_LEFT :
-                draw.rect(background,blanc,[rect[0],rect[1],60,60])
-                rect[0]-=deplacement
-                if rect[0]<= 100 :
-                    rect[0]=100
-                draw.rect(background,noir,[rect[0],rect[1],60,60]) 
-            if events.key == K_DOWN :
-                draw.rect(background,blanc,[rect[0],rect[1],60,60])
-                rect[1]+=deplacement
-                if rect[1]>=700 :
-                    rect[1]=700
-                draw.rect(background,noir,[rect[0],rect[1],60,60])
-            if events.key == K_UP :
-                draw.rect(background,blanc,[rect[0],rect[1],60,60])
-                rect[1]-=deplacement
-                if rect[1]<=100 :
-                    rect[1]
-                draw.rect(background,noir,[rect[0],rect[1],60,60]) 
-            """
     
 running = True
 while running:
@@ -91,7 +63,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         
-    pygame.draw.circle(screen, "red", (round(player_pos.x), round(player_pos.y)), 40)
+    pygame.draw.circle(screen, colors["red"], (round(player_pos.x), round(player_pos.y)), 40)
     game()
 
     screen.blit(contour,(50,50))
