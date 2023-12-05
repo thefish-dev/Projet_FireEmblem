@@ -22,6 +22,9 @@ class Game:
                 if self.grid[x][y] == unit or self.grid[x][y] == unit.name:
                     return (x,y)
 
+    def geenerate_obstacles(self, amount):
+        ...
+
     def distance(self,position: tuple,position_voulue: tuple) :
         if position[0]==int(position[0]) and position[1]==int(position[1])  :
             return sqrt(((position_voulue[0]-position[0])**2)+((position_voulue[1]-position[1])**2))

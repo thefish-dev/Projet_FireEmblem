@@ -13,7 +13,10 @@ class Unit:
         self.properties = properties
         self.maxDistance = maxDistance
 
+        self.team = 0
         self.health = self.__maxHealth
+        self.shield = 0
+        self.can_attack = 0
 
     def __str__(self):
         return self.name
@@ -22,7 +25,7 @@ class Unit:
         self.team = team
 
     def modify_health(self, modification: int):
-        self.health += modification
+        self.health += round(modification)
         self.health = max(min(self.health, self.__maxHealth), 0) # Equivalent de clamp(valeur, min, max)
         print("New health", self.health)
 
@@ -32,7 +35,16 @@ class Unit:
     def attack(self, target, attack: Attack):
         if not self.is_alive(): 
             return
-
+        if target.shield > 0:
+            print(f"Cette unité est protégée par un bouclier, votre attaque ne lui a rien fait. Son bouclier a désormait {target.shield} de résistance.")
+            target.shield -= 1
+            return 0
+        
+        if self.can_attack > 0:
+            self.can_attack -= 1
+            print("Votre unité n'est pas capable d'attaquer.", "Elle pourra attaquer de nouveau au prochain tour." if self.can_attack == 0 else "")
+            return 0
+        
         damages = attack.damages
         if randint(0,1) <= attack.critic_damage_chance: 
             damages *= attack.critic_damage_multiplier # Application du multiplicateur en fonction de sa probabilité
@@ -48,8 +60,7 @@ class Unit:
         return score
 
     def use_ability(self, unit, ability: Ability):
-        
-        ...  
+        ability.Run(unit) 
         
     def get_health(self):
         return int((self.health / self.__maxHealth) * 100)
