@@ -12,7 +12,6 @@ image_text_start=demande_start.render('Quelle joueur voulez vous jouer ?', 1,ble
 demande_perso1=font.SysFont("monospace",20)
 image_text_pers_karim=demande_perso1.render('Karim', 1,bleu)
 
-fenetre
 
 
 
