@@ -90,8 +90,8 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-            
-    pygame.draw.circle(screen, "red", tuple(player_pos), 40)
+        
+    pygame.draw.circle(screen, "red", (round(player_pos.x), round(player_pos.y)), 40)
     game()
 
     screen.blit(contour,(50,50))
