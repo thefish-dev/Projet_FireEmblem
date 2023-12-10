@@ -4,45 +4,47 @@ import sys
 # Initialisation de Pygame
 pygame.init()
 
-# Taille de la fenêtre
+#Pour l'affichage du text
 choix_joueur_1=True
 choix_joueur_2=False
 
+#Dictionnaire avec les unités choisit par les joueurs
 choix_joueur= {
      "Joueur1" : "",
      "Joueur2" :""
 }
 
-screen_width = 800
-screen_height = 800
-screen = pygame.display.set_mode((screen_width, screen_height))
+#Création de la fenétre
+screen = pygame.display.set_mode((800, 800))
 pygame.display.set_caption("Fire emblem")
 
+#Dictionnaire avec les couleurs
 colors = {
     "blue" : (0,255,255),
     "red" : (255,0,0),
     "vert" :(0,255,0),
     "black" : (0,0,0)
 }
-
+#Fonction pour charger les images plus rapidement
 def element(chemin,tall) :       
         var=pygame.image.load(chemin)
         var=var.convert_alpha()
         var=pygame.transform.scale(var,tall)
         return var
 
-demande_perso = pygame.font.SysFont("monospace",30)
-image_text = demande_perso.render('Joueur 1 :choisissez votre personnage ', True, colors["blue"])
 
+#Differente police utilisé 
+description = pygame.font.SysFont("monospace",15)
+affichage=pygame.font.SysFont("chemin_vers_ta_police_en_gras.ttf",50)
 demande_perso = pygame.font.SysFont("monospace",30)
+
+#Question de choix des joueurs
+image_text = demande_perso.render('Joueur 1 :choisissez votre personnage ', True, colors["blue"])
 image_text2 = demande_perso.render('Joueur 2 :choisissez votre personnage ', True, colors["blue"])
 
-description = pygame.font.SysFont("monospace",15)
-
-affichage=pygame.font.SysFont("chemin_vers_ta_police_en_gras.ttf",50)
 
 
-
+#Description des unités
 Unit1_description = description.render('Equipe réflechi et methodique mais Bombe est suicidaire ce qui ne fait pas la  ', True, colors["vert"])
 Unit1_p_2=description.render('fierté du puissant mage noir, un voleur capable de foudroyer ses énnemi',True, colors["vert"])
 print_unit1=affichage.render('Unit 1',True,colors["black"])
@@ -59,7 +61,7 @@ print_unit3=affichage.render('Unit 3',True,colors["black"])
 
 
 
-
+#Chargement des images
 fond_acceuil=element("./Images/fond_acceuil.jpg",(800,800))
 bombe=element("./Images/bombe.png",(80,80))
 mage=element("./Images/mage.png",(80,80))
@@ -69,29 +71,25 @@ dustin_poirier=element("./Images/dustin_poirier.png",(80,80))
 singe=element("./Images/singe.png",(80,80))
 wednesday=element("./Images/wednesday.png",(100,150))
 
+#list des joueurs et de leurs coordonnées 
 lst_perso=[bombe,mage,singe,dustin_poirier,stone,serpent]
 perso_x_y=[(110,540),(200,540),(320,540),(420,540),(530,540),(630,540)]
-
-
-
-
-
 
 
 # Boucle de jeu
 running = True
 while running:
-    # Gestion des événements
+    # Evénements
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-
-        if event.type == pygame.MOUSEBUTTONDOWN:  # Vérification du clic de souris
-            mouse_pos = pygame.mouse.get_pos()  # Récupère la position de la souris
+        #Detecte si la souris est sur le rectangle Unit1
+        if event.type == pygame.MOUSEBUTTONDOWN:  
+            mouse_pos = pygame.mouse.get_pos()  
             if 100 <= mouse_pos[0] <= 300 and \
-               450 <= mouse_pos[1] <= 550 :
+               430 <= mouse_pos[1] <= 630 :
                 
-
+                #integre le choix du joueurs dans le dictionnaire correspondant
                 if choix_joueur["Joueur1"]=='' :
                     choix_joueur["Joueur1"]='Unit1'
                 else :
@@ -100,7 +98,7 @@ while running:
                 choix_joueur_2=True
 
             if 310 <= mouse_pos[0] <= 510 and \
-               450 <= mouse_pos[1] <= 550 :
+               430 <= mouse_pos[1] <= 630 :
                 if choix_joueur["Joueur1"]=='' :
                     choix_joueur["Joueur1"]='Unit2'
                 else :
@@ -109,7 +107,7 @@ while running:
                 choix_joueur_2=True
             
             if 520 <= mouse_pos[0] <= 720 and \
-               450 <= mouse_pos[1] <= 550 :
+               430 <= mouse_pos[1] <= 630 :
                 if choix_joueur["Joueur1"]=='' :
                     choix_joueur["Joueur1"]='Unit3'
                 else :
@@ -120,8 +118,8 @@ while running:
 
 
    
-    screen.fill((0,0,0))
-
+    
+    #Affichage de toute les images et création des rectangls pour l'estethisme 
     screen.blit(fond_acceuil,(0,0))
     screen.blit(wednesday,(100,650))
 
@@ -157,7 +155,7 @@ while running:
 
     for i in range (len(lst_perso)) :
          screen.blit(lst_perso[i],perso_x_y[i])
-    
+    #arret de la boucle quand les perssonnages sont choisis
     if choix_joueur['Joueur1'] != '' and choix_joueur['Joueur2'] != '' :
         running=False
 
