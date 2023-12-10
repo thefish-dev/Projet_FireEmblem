@@ -1,4 +1,4 @@
-from Abilities import abilities
+from .Abilities import abilities
 
 class Ability:
     def __init__(self, name: str, desc: str):
@@ -10,4 +10,8 @@ class Ability:
         if ability["target"] == "ally":
             if target.team == author.team:
                 ability["effect"](target)
-
+        elif ability["target"] == "self":
+            ability["effect"](author)
+        elif ability["target"] == "enemy":
+            if target.team != author.team:
+                ability["effect"](target)

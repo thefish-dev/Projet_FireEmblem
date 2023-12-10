@@ -34,7 +34,7 @@ class Unit:
     
     def attack(self, target, attack: Attack):
         if not self.is_alive(): 
-            return
+            return 0
         if target.shield > 0:
             print(f"Cette unité est protégée par un bouclier, votre attaque ne lui a rien fait. Son bouclier a désormait {target.shield} de résistance.")
             target.shield -= 1
@@ -50,8 +50,8 @@ class Unit:
             damages *= attack.critic_damage_multiplier # Application du multiplicateur en fonction de sa probabilité
 
         target.modify_health( -damages )
-        ans1 = f"{target.name} has been attacked and received {damages} damages."
-        ans2 = f"{target.name} has been killed."
+        ans1 = f"{target.name} a été et a reçu {damages} de dégats."
+        ans2 = f"{target.name} a été tué."
         print(ans1 if target.is_alive() else ans2) 
 
         score = 1
