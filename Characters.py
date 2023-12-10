@@ -33,7 +33,7 @@ Characters = [
         Unit("Dustin Poirier", "Punch", 60, 5, 
         attacks=[
             Attack("Ground and pound", "Cette attaque est agressive et puissante mais elle necessite d'étre proche pour étre utiliser (1 case)", 35),
-            Attack("", "This is attack 2", 20),
+            Attack("", "", 20),
         ],
         abilities=None
         )
