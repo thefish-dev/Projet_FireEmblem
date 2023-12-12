@@ -1,8 +1,43 @@
 import pygame
+from pygame import *
 import sys
+from random import randint
+
 
 # Initialisation de Pygame
 pygame.init()
+class Elem_Graphique(pygame.sprite.Sprite):
+    def __init__(self,position_x,position_y,chemin):
+        super().__init__()
+        self.image= element(chemin,(60,60))
+        self.rect = self.image.get_rect()
+        self.rect.x = position_x # Position initiale x
+        self.rect.y = position_y  # Position initiale y
+    
+    def droite (self) :
+        if self.rect.x<640 :
+            self.rect.x += 60
+    def gauche(self) :
+        if self.rect.x>100 :
+            self.rect.x-=60
+    def monter (self) :
+        if self.rect.y>100 :
+            self.rect.y-=60
+    def descendre (self) : 
+        if self.rect.y <640 :
+            self.rect.y+=60
+
+
+    def element(self,chemin,tall) :
+        var=image.load(chemin)
+        var=var.convert_alpha()
+        var=transform.scale(var,tall)
+        return var
+    def __str__(self) -> str:
+        return super().__str__()
+
+
+
 
 #Pour l'affichage du text
 choix_joueur_1=True
@@ -10,8 +45,8 @@ choix_joueur_2=False
 
 #Dictionnaire avec les unités choisit par les joueurs
 choix_joueur= {
-     "Joueur1" : "",
-     "Joueur2" :""
+     "Joueur1" : None,
+     "Joueur2" :None
 }
 
 #Création de la fenétre
@@ -23,7 +58,8 @@ colors = {
     "blue" : (0,255,255),
     "red" : (255,0,0),
     "vert" :(0,255,0),
-    "black" : (0,0,0)
+    "black" : (0,0,0),
+    "white" : (255,255,255)
 }
 #Fonction pour charger les images plus rapidement
 def element(chemin,tall) :       
@@ -36,6 +72,7 @@ def element(chemin,tall) :
 #Differente police utilisé 
 description = pygame.font.SysFont("monospace",15)
 affichage=pygame.font.SysFont("chemin_vers_ta_police_en_gras.ttf",50)
+affichage_erreur=pygame.font.SysFont("chemin_vers_ta_police_en_gras.ttf",30)
 demande_perso = pygame.font.SysFont("monospace",30)
 
 #Question de choix des joueurs
@@ -58,6 +95,11 @@ Unit3_descripion= description.render('Equipe visieuse car le gros stone peut pro
 Unit3_descripion_p_2= description.render('beaucoup de vie contrairement a ce gros tank de Stone,Serpent peut soigner',True, colors["blue"])
 print_unit3=affichage.render('Unit 3',True,colors["black"])
 
+text_erreur_joueur=affichage_erreur.render('Equipe déja choisit par le joueur 1',True, colors["white"])
+text_erreur='Equipe déja choisit par le joueur 1'
+text_erreur_f=''
+affichage_text_erreur_joueur=False
+
 
 
 
@@ -70,6 +112,24 @@ stone=element("./Images/stone.png",(80,80))
 dustin_poirier=element("./Images/dustin_poirier.png",(80,80))
 singe=element("./Images/singe.png",(80,80))
 wednesday=element("./Images/wednesday.png",(100,150))
+
+unit1_position=[(100,100),(160,100),(400,100),(580,100),(640,100),(340,160),(400,160)]
+unit_position2=[(100,640),(160,640),(400,640),(580,640),(640,640),(340,580),(400,580)]
+
+joueur1_unit1=[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/bombe.png") for i in range (5)]+[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/mage.png") for i in range (5,7)]
+
+joueur1_unit2=[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/singe.png") for i in range (4)]+[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/dustin_poirier.png") for i in range (4,7)]
+
+joueur1_unit3=[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/stone.png") for i in range (2)]+[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/serpent.png") for i in range (2,7)]
+
+joueur2_unit1=[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/bombe.png") for i in range (5)]+[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/mage.png") for i in range (5,7)]
+
+joueur2_unit2=[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/singe.png") for i in range (4)]+[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/dustin_poirier.png") for i in range (4,7)]
+
+joueur2_unit3=[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/stone.png") for i in range (2)]+[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/serpent.png") for i in range (2,7)]
+temp_final=0
+temp_actuel=0
+
 
 #list des joueurs et de leurs coordonnées 
 lst_perso=[bombe,mage,singe,dustin_poirier,stone,serpent]
@@ -90,28 +150,38 @@ while running:
                430 <= mouse_pos[1] <= 630 :
                 
                 #integre le choix du joueurs dans le dictionnaire correspondant
-                if choix_joueur["Joueur1"]=='' :
-                    choix_joueur["Joueur1"]='Unit1'
+                if choix_joueur["Joueur1"]==None :
+                    choix_joueur["Joueur1"]=joueur1_unit1
                 else :
-                    choix_joueur["Joueur2"]='Unit1'
-                choix_joueur_1=False
-                choix_joueur_2=True
-
-            if 310 <= mouse_pos[0] <= 510 and \
-               430 <= mouse_pos[1] <= 630 :
-                if choix_joueur["Joueur1"]=='' :
-                    choix_joueur["Joueur1"]='Unit2'
-                else :
-                    choix_joueur["Joueur2"]='Unit2'
+                    if choix_joueur["Joueur1"]!= joueur1_unit1 :
+                        choix_joueur["Joueur2"]=joueur2_unit1
+                    else : 
+                        temp_final= 3000
                 choix_joueur_1=False
                 choix_joueur_2=True
             
+
+
+            if 310 <= mouse_pos[0] <= 510 and \
+               430 <= mouse_pos[1] <= 630 :
+                if choix_joueur["Joueur1"]==None :
+                    choix_joueur["Joueur1"]=joueur1_unit2
+                else :
+                    if choix_joueur["Joueur1"]!= joueur1_unit2 :
+                        choix_joueur["Joueur2"]=joueur2_unit2
+                    else : 
+                        temp_final= 3000
+                choix_joueur_1=False
+                choix_joueur_2=True
             if 520 <= mouse_pos[0] <= 720 and \
                430 <= mouse_pos[1] <= 630 :
-                if choix_joueur["Joueur1"]=='' :
-                    choix_joueur["Joueur1"]='Unit3'
+                if choix_joueur["Joueur1"]==None :
+                    choix_joueur["Joueur1"]=joueur1_unit3
                 else :
-                    choix_joueur["Joueur2"]='Unit3'
+                    if choix_joueur["Joueur1"]!= joueur1_unit3 :
+                        choix_joueur["Joueur2"]=joueur2_unit3
+                    else : 
+                        temp_final= 3000
                 choix_joueur_1=False
                 choix_joueur_2=True
 
@@ -155,11 +225,17 @@ while running:
 
     for i in range (len(lst_perso)) :
          screen.blit(lst_perso[i],perso_x_y[i])
+
+    if temp_final!=0 :        
+        temp_actuel=pygame.time.get_ticks()
+        screen.blit(text_erreur_joueur,(250,700))
+
+    if temp_final<temp_actuel :
+        text_erreur_joueur=description.render(text_erreur_f,False, colors["black"])
+        
     #arret de la boucle quand les perssonnages sont choisis
-    if choix_joueur['Joueur1'] != '' and choix_joueur['Joueur2'] != '' :
+    if choix_joueur['Joueur1'] != None and choix_joueur['Joueur2'] != None :
         running=False
-
-
 
     # Mettre à jour l'affichage
     pygame.display.flip()
@@ -167,4 +243,141 @@ while running:
 
 # Quitter Pygame
 pygame.quit()
+
+print(choix_joueur)
+
+playing=True 
+
+pygame.init()
+
+# Définition de la taille de la fenêtre
+
+background = pygame.display.set_mode((800, 800))
+pygame.display.set_caption("Fire emblem")
+
+carre=element("./Images/carre.JPG",(60,60))
+contour=element("./Images/contour.png",(700,700))
+fond = element("./Images/fond.png",(800,800))
+
+def detecte_obstacle(choix_joueur,coordonnée : tuple) :
+    pas_obstacle=True
+    for i in range(len(choix_joueur["Joueur1"])) :
+        if coordonnée== ((choix_joueur["Joueur1"][i].rect.x,choix_joueur["Joueur1"][i].rect.y)) :
+            pas_obstacle=False
+        elif coordonnée== ((choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y)) :
+            pas_obstacle=False
+    return pas_obstacle
+
+def create_obstacle(choix_joueur) :
+    obstacle_aléatoire= [0,0]
+    lst_coordonnée_possible_x=[(100+i*60) for i in range (10)]
+    lst_coordonnée_possible_y=[(100+i*60) for i in range (10)]
+    trouver_place_obstacle=True
+
+    while trouver_place_obstacle :
+        essaie=(lst_coordonnée_possible_x[randint(0,9)],lst_coordonnée_possible_x[randint(0,9)])
+        if detecte_obstacle(choix_joueur,essaie) :
+            trouver_place_obstacle=False
+    return essaie
+
+def supprimer_élement(choix_joueur,joueur,coordonnée) : 
+    for i in range (len(choix_joueur[joueur])) :
+        if choix_joueur[joueur][i]==coordonnée :
+            choix_joueur[joueur].pop(i)           
+    return choix_joueur
+
+def search_element(choix_joueur,coordonnée) :
+    for i in range(len(choix_joueur["Joueur1"])) :
+        if (choix_joueur["Joueur1"].rect.x,choix_joueur["Joueur1"].rect.y)==coordonnée :
+            return i,"Joueur1"
+        elif (choix_joueur["Joueur2"].rect.x,choix_joueur["Joueur2"].rect.y)==coordonnée :
+            return i,"Joueur2"
+    return None 
+
+#verifie dans quele carré le joueur clique
+def search_coordinate(coordonate) :
+    possible_coordonate_x=[(100+i*60) for i in range (10)]
+    possible_coordonate_y=[(100+i*60) for i in range (10)]
+    if coordonate[0]<100 or coordonate[0]>640 or coordonate[1]<100 or coordonate[1]>640 :
+        return None
+    else :
+        for i in range (len(possible_coordonate_x)) :
+            for j in range (len(possible_coordonate_y)) :
+                if (coordonate[0]>=possible_coordonate_x[j] and coordonate[0]< possible_coordonate_x[j]+60) and (coordonate[1]>=possible_coordonate_x[i] and coordonate[1]< possible_coordonate_x[i]+60) :
+                    return (possible_coordonate_x[j],possible_coordonate_y[i])
+                
+def valeur_absolue(a : int) :
+    if a>0 :
+        return a
+    else :
+        return -a
+
+#utilisation des vecteurs pour savoir si l'unité est en mesure de se déplacer sur la case souhaitée : Xb - Xa)/60 pour l'abcisse 
+# (Yb-Ya)/60 pour l'ordonnée, la somme de la valeur absolue des deux  sont le nombre totale de case déplacépour connaitre le nombre totale 
+# de case déplacé, on divise par 60 car un carré fais, 60 pixels sur 60 pixels                   
+def compte_case(coordonnée_base,transform) :
+    x_total=(transform[0]- coordonnée_base[0])/60
+    y_totlal=(transform[1]- coordonnée_base[1])/60
+    return (valeur_absolue(x_total)+valeur_absolue(y_totlal))
+
+def déplacemet_total(coordonnée_base,transform) :
+    x_total=(transform[0]- coordonnée_base[0])/60
+    y_totlal=(transform[1]- coordonnée_base[1])/60
+    return (x_total,y_totlal)
+
+    
+
+ 
+
+    
+
+lst_obstacle=["./Images/rocher.png","./Images/sapin.png","./Images/arbre.png","./Images/circulation.png","./Images/chien_arthur.png"]
+for i in range (len(lst_obstacle)) :
+    lst_obstacle[i]=element(lst_obstacle[i],(60,60))
+
+lst_position_obstacle=[]
+
+while len(lst_position_obstacle) <5 :
+    essaie=create_obstacle(choix_joueur)
+    if essaie  not in lst_position_obstacle :
+        lst_position_obstacle.append(essaie)
+print(lst_position_obstacle)
+
+# Boucle de jeu
+running = True
+while running:
+    # Gestion des événements
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+        if event.type == pygame.MOUSEBUTTONDOWN:  
+
+            mouse_pos = pygame.mouse.get_pos()  
+            if 100 <= mouse_pos[0] <= 300 and \
+               430 <= mouse_pos[1] <= 630 :
+                pass
+    background.fill((0,0,0))  # Remplir l'écran avec une couleur de fond
+    background.blit(fond,(0,0))
+    background.blit(contour,(50,50))
+
+    for i in range(10) :
+        for j in range(10) :
+            background.blit(carre,((100+j*60),(100+i*60)))
+    for i in range (len(choix_joueur["Joueur1"])) :
+        background.blit(choix_joueur["Joueur1"][i].image,(choix_joueur["Joueur1"][i].rect.x,choix_joueur["Joueur1"][i].rect.y))
+    for i in range (len(choix_joueur["Joueur2"])) :
+        background.blit(choix_joueur["Joueur2"][i].image,(choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y))
+    for i in range (len(lst_obstacle)) :
+        background.blit(lst_obstacle[i],(lst_position_obstacle[i][0],lst_position_obstacle[i][1]))
+
+    
+    
+    
+    
+    # Mettre à jour l'affichage
+    pygame.display.flip()
+
+# Quitter Pygame
+pygame.quit()
+
 sys.exit()
