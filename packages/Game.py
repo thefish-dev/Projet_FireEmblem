@@ -26,13 +26,15 @@ class Game:
                 if self.grid[x][y] == unit or self.grid[x][y] == unit.name:
                     return (x,y)
 
-    def geenerate_obstacles(self, amount):
+    def generate_obstacles(self, amount):
         obstacles = [1,2,3]
         for _ in range(amount):
             obstacle = random.choice(obstacles)
 
             def random_loc():
-                loc = (random.randint(2,self.size - 4), random.randint(0,self.size-1))
+                min_x, max_x = 2, self.size - 4
+
+                loc = (random.randint(min_x, max_x), random.randint(0,self.size-1))
                 if self.is_there_something(loc):
                     return random_loc()
                 else:
