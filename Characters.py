@@ -13,12 +13,11 @@ Characters = [
         ),
         Unit("Ouantit_the_wizard", "Magie", 100, 5, 
         attacks=[
-            Attack("Vol", "Vous pouvez volez n'importe quelle attaque de n'importe quelle unité", None),# il faut qu'on fasse en sorte que sa marche
-            Attack("Coup de foudre", "Cette attaque electrocute une unité, vous pouvez l'utiliser à une distance de 2 case max", 20),
-
+            Attack("Coup de foudre", "Cette attaque electrocute une unité, vous pouvez l'utiliser à une distance de 2 case max", 20)
         ],
         abilities=[
-            Ability("Bouclier","Le mage peut ne pas recevoir des attaques car il crée un bouclier")
+            Ability("Bouclier","Le mage peut ne pas recevoir des attaques car il crée un bouclier"),
+            Ability("Vol", "Vous pouvez volez aléatoirement une attaque de n'importe quelle unité que vous pourrez utiliser au prochain tour UNIQUEMENT.")
         ]
         )
     ]),

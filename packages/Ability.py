@@ -5,15 +5,18 @@ class Ability:
         self.name = name
         self.desc = desc
 
-    def Run(self, author, target):
-        ability = abilities[self.name]
-        if ability["target"] == "ally":
-            if target.team == author.team:
-                ability["effect"](target)
+        self.ability = abilities[self.name] 
+        self.target = self.ability["target"]
+        self.effect = self.ability["effect"]
 
-        elif ability["target"] == "self":
-            ability["effect"](author)
-            
-        elif ability["target"] == "enemy":
+    def Run(self, author, target):
+        if self.target == "ally":
+            if target.team == author.team:
+                return self.effect(target)
+
+        elif self.target == "enemy":
             if target.team != author.team:
-                ability["effect"](target)
+                return self.effect(target)
+                
+        elif self.target == "self":
+            return self.effect(author)

@@ -35,22 +35,18 @@ for unit in char1.units:
 # Recusrive function to let the player choose what action to do
 # If num == 0: first try, every choice possible
 # If num == 1: player moved, he can do everything but move
-# If num == 2: player did something impossible, he has to restart
 def playerChoice(char: Character, enemy: Character, num: int):
     global selectedUnit, selectedAction, selectedAbility, selectedAttack, selectedTarget
 
-    if num == 2: print("\nYou have to input your informations again, this is probably due to the fact that you tryed to accomplish something impossible.")
-
     # Choosing a unit
     if num != 1:
-        units = list(char.units)    
+        units = char.units
         for unit in units: units.remove(unit) if not unit.is_alive() else ...
+
         print("\nSelect a unit")  
         for i in range(len(units)):
             print(f"{i+1} - {units[i].name} - {units[i].get_health()}% Health")
-        print(char.units)
-        print(units)
-        selectedUnit = char.units[int(input("Enter a number: "))-1]
+        selectedUnit = units[int(input("Enter a number: "))-1]
             
     # Choosing an action
     actions = ["Move", "Attack"]
@@ -98,6 +94,8 @@ def playerChoice(char: Character, enemy: Character, num: int):
     if selectedAction == "Attack":
             
         targets = enemy.units
+        for unit in targets: targets.remove(unit) if not unit.is_alive() else ...
+
         print("\nSelect a target: ")  
         for i in range(len(targets)):
             print(f"{i+1} - {targets[i].name} - {targets[i].get_health()}% Health")
@@ -105,24 +103,27 @@ def playerChoice(char: Character, enemy: Character, num: int):
 
     elif selectedAction == "Ability":
 
+        if selectedAbility.target == "self": 
+            selectedTarget = None
+            return
+        
         targets = char.units
         print("\nSelect a target: ")
         for i in range(len(targets)):
             print(f"{i+1} - {targets[i].name} - {targets[i].get_health()}% Health")
         selectedTarget = targets[int(input("Enter a number: "))-1]
-        
-    else: return playerChoice(char, enemy, 2)
-
 
 
 def executeRound(char: Character, enemy: Character):
+    msg = ""
     if selectedAction == "Attack":
         score, msg = selectedUnit.attack(selectedTarget, selectedAttack) # Renvoie un tuple avec le score et un message à afficher
         char.increment_score(score)
-        print(msg)
+        
     elif selectedAction == "Ability":
-        selectedUnit.use_ability(selectedTarget, selectedAbility)
+        msg = selectedUnit.use_ability(selectedTarget, selectedAbility)
 
+    print(msg)
     if not char.can_play():
         enemy.increment_score(5)
         return enemy
@@ -132,10 +133,11 @@ def executeRound(char: Character, enemy: Character):
         return char
     
     else:
-        return False
+        return None
+
 
 def displayFinalScore():
-    print("Final Score:")
+    print("Score Final:")
     order = {name1:char1.get_score(), name2:char2.get_score()}
     for name in sorted(order):
         print(f"{name} - {order[name]}")
@@ -156,15 +158,18 @@ while playing:
     result = executeRound(char1, char2) 
     if result:
         playing = False
-        print(f"\n{result.name} has won!\n")
-        continue
-
-    game.affichage()
-    playerChoice(char2, char1, 0)
-    clearConsole()
-    result = executeRound(char2, char1) 
-    if result:
-        playing = False
-        print(f"\n{result.name} has won!\n")
+        print(f"\n{result.name} a gagné !\n")
+        
+    if playing:
+        print("\nC'est maintenant au tour de", char2.name, "!\n")
+        game.affichage()
+        playerChoice(char2, char1, 0)
+        clearConsole()
+        result = executeRound(char2, char1) 
+        if result:
+            playing = False
+            print(f"\n{result.name} a gagné !\n")
+        else:
+            print("\nC'est maintenant au tour de", char1.name, "!\n")
 
 displayFinalScore()

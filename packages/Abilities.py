@@ -1,18 +1,27 @@
-def heal(target):
+import random
+
+def heal(author, target):
     target.modify_health(20)
-    print("Vous avez soigné", target.name)
+    return f"Vous avez soigné {target.name}"
 
-def protect(target):
+def protect(author, target):
     target.shield = 1
-    print("Vous avez protégé", target.name)
+    return f"Vous avez protégé {target.name}" 
 
-def shield(target):
-    target.shield = 3
-    print("Vous vous êtes appliqué un bouclier.")
+def shield(author, target):
+    target.shield = 1
+    return "Vous vous êtes appliqué un bouclier. Vous pourrez désormais résistez à la prochaine attaque."
 
-def blind(target):
+def blind(author, target):
     target.can_attack = 1
-    print(target.name, "est maintenant aveuglé, il ne pourra plus attaquer.")
+    return f"{target.name} est maintenant aveuglé, il ne pourra plus attaquer."
+
+def vol(author, target):
+    attacks = target.attacks
+    random_attack = attacks[random.randint(0, len(attacks)-1)]
+    
+    attacks.remove(random_attack)
+    author.attacks += [random_attack]
 
 abilities = {
     "Soin": {
@@ -30,5 +39,9 @@ abilities = {
     "Aveugler": {
         "target": "enemy",
         "effect": blind
+    },
+    "Vol": {
+        "target": "enemy",
+        "effect": vol
     },
 }

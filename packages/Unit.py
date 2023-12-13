@@ -55,7 +55,7 @@ class Unit:
         return (score, f"{-damages} de dégats!" + f"Vous avez achevé {target.name}!" if not target.is_alive() else "")
 
     def use_ability(self, target, ability: Ability):
-        ability.Run(self, target) 
+        return ability.Run(self, target) 
         
     def get_health(self):
         return int((self.health / self.__maxHealth) * 100)
