@@ -52,7 +52,7 @@ class Unit:
         if damages > attack.damages: score += 1
         if not target.is_alive(): score += 2
 
-        return (score, f"{-damages} de dégats!" + f"Vous avez achevé {target.name}!" if target.is_alive() else "")
+        return (score, f"{-damages} de dégats!" + f"Vous avez achevé {target.name}!" if not target.is_alive() else "")
 
     def use_ability(self, target, ability: Ability):
         ability.Run(self, target) 
