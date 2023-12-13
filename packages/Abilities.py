@@ -18,7 +18,7 @@ def blind(author, target):
 
 def rob(author, target):
     attacks = target.attacks
-    random_attack = attacks[random.randint(0, len(attacks)-1)]
+    random_attack = random.choice(attacks)
 
     attacks.remove(random_attack)
     author.attacks += [random_attack]

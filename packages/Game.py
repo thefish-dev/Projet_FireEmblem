@@ -1,5 +1,9 @@
 from math import *
 from packages import Unit
+import random
+
+def clamp(valeur, min, max):
+    return max(min(valeur, max), min)
 
 class Game:
     def __init__(self, size: int):
@@ -23,7 +27,20 @@ class Game:
                     return (x,y)
 
     def geenerate_obstacles(self, amount):
-        ...
+        obstacles = [1,2,3]
+        for _ in range(amount):
+            obstacle = random.choice(obstacles)
+
+            def random_loc():
+                loc = (random.randint(2,self.size - 4), random.randint(0,self.size-1))
+                if self.is_there_something(loc):
+                    return random_loc()
+                else:
+                    return loc
+            
+            x,y = random_loc()
+            self.grid[x][y] = obstacle
+
 
     def distance(self,position: tuple,position_voulue: tuple) :
         if position[0]==int(position[0]) and position[1]==int(position[1])  :
@@ -42,9 +59,6 @@ class Game:
             return False
         
     def is_there_something(self, position: tuple):
-        for x in range(self.size):
-            for y in range(self.size):
-                if self.grid[x][y] != None and (x,y) == position:
-                    return True
-        return False
+        x,y = position
+        return self.grid[x][y] != None
         
