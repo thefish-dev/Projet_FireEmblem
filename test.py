@@ -5,7 +5,7 @@ Projet Fire Emblem: Debug Version
 from os import system
 from packages import * # Every classes in the folder ./packages
 
-def clearConsole(): system("cls") # Simple command to clear the console
+def clearConsole(): ... #system("cls") # Simple command to clear the console
 
 # Characters list containing instances of class Character
 from Characters import Characters
@@ -31,7 +31,6 @@ for unit in char1.units:
     currentLoc += 5
 
 
-char2.units[0].modify_health(-100)
 
 # Recusrive function to let the player choose what action to do
 # If num == 0: first try, every choice possible
@@ -114,9 +113,13 @@ def playerChoice(char: Character, enemy: Character, num: int):
         
     else: return playerChoice(char, enemy, 2)
 
+
+
 def executeRound(char: Character, enemy: Character):
     if selectedAction == "Attack":
-        char.increment_score(selectedUnit.attack(selectedTarget, selectedAttack)) # Renvoie 1 (+1 si coup critique +1 si cible éliminée) donc 3 si cible éliminé avec coup critique
+        score, msg = selectedUnit.attack(selectedTarget, selectedAttack) # Renvoie un tuple avec le score et un message à afficher
+        char.increment_score(score)
+        print(msg)
     elif selectedAction == "Ability":
         selectedUnit.use_ability(selectedTarget, selectedAbility)
 
@@ -149,7 +152,7 @@ while playing:
 
     game.affichage()
     playerChoice(char1, char2, 0)
-    #clearConsole()
+    clearConsole()
     result = executeRound(char1, char2) 
     if result:
         playing = False
@@ -158,7 +161,7 @@ while playing:
 
     game.affichage()
     playerChoice(char2, char1, 0)
-    #clearConsole()
+    clearConsole()
     result = executeRound(char2, char1) 
     if result:
         playing = False

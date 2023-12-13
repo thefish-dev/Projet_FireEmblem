@@ -10,8 +10,10 @@ class Ability:
         if ability["target"] == "ally":
             if target.team == author.team:
                 ability["effect"](target)
+
         elif ability["target"] == "self":
             ability["effect"](author)
+            
         elif ability["target"] == "enemy":
             if target.team != author.team:
                 ability["effect"](target)

@@ -4,13 +4,12 @@ from .Ability import Ability
 from random import randint
 
 class Unit:
-    def __init__(self, name: str, unitType: str, maxHealth: int, maxDistance: int, attacks: list, abilities: (list or None), properties: (list or None)):
+    def __init__(self, name: str, unitType: str, maxHealth: int, maxDistance: int, attacks: list, abilities: (list or None)):
         self.name = name
         self.type = unitType
         self.__maxHealth = maxHealth
         self.attacks = attacks
         self.abilities = abilities
-        self.properties = properties
         self.maxDistance = maxDistance
 
         self.team = 0
@@ -34,33 +33,29 @@ class Unit:
     
     def attack(self, target, attack: Attack):
         if not self.is_alive(): 
-            return 0
+            return (0, "L'unité est morte")
         if target.shield > 0:
-            print(f"Cette unité est protégée par un bouclier, votre attaque ne lui a rien fait. Son bouclier a désormait {target.shield} de résistance.")
             target.shield -= 1
-            return 0
+            return (0, f"Cette unité est protégée par un bouclier, votre attaque ne lui a rien fait. Son bouclier a désormait {target.shield} de résistance.")
         
         if self.can_attack > 0:
             self.can_attack -= 1
-            print("Votre unité n'est pas capable d'attaquer.", "Elle pourra attaquer de nouveau au prochain tour." if self.can_attack == 0 else "")
-            return 0
+            return (0,"Votre unité n'est pas capable d'attaquer." + "Elle pourra attaquer de nouveau au prochain tour." if self.can_attack == 0 else "")
         
         damages = attack.damages
         if randint(0,1) <= attack.critic_damage_chance: 
             damages *= attack.critic_damage_multiplier # Application du multiplicateur en fonction de sa probabilité
 
         target.modify_health( -damages )
-        ans1 = f"{target.name} a été et a reçu {damages} de dégats."
-        ans2 = f"{target.name} a été tué."
-        print(ans1 if target.is_alive() else ans2) 
 
         score = 1
         if damages > attack.damages: score += 1
         if not target.is_alive(): score += 2
-        return score
 
-    def use_ability(self, unit, ability: Ability):
-        ability.Run(unit) 
+        return (score, f"{-damages} de dégats!" + f"Vous avez achevé {target.name}!" if target.is_alive() else "")
+
+    def use_ability(self, target, ability: Ability):
+        ability.Run(self, target) 
         
     def get_health(self):
         return int((self.health / self.__maxHealth) * 100)

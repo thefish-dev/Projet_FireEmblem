@@ -1,5 +1,5 @@
 def heal(target):
-    target.modify_health(30)
+    target.modify_health(20)
     print("Vous avez soigné", target.name)
 
 def protect(target):

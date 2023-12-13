@@ -17,7 +17,9 @@ Characters = [
             Attack("Coup de foudre", "Cette attaque electrocute une unité, vous pouvez l'utiliser à une distance de 2 case max", 20),
 
         ],
-        abilities=Ability("Bouclier","Le mage peut ne pas recevoir des attaques car il crée un bouclier"),
+        abilities=[
+            Ability("Bouclier","Le mage peut ne pas recevoir des attaques car il crée un bouclier")
+        ]
         )
     ]),
     Character("Metde", [
@@ -42,15 +44,18 @@ Characters = [
             Attack("Charge", "Il te fonce dedans avec son gros crane de pierre ", 25),
             Attack("Tremblement de terre", "Il peut faire trembler le sol et ainsi infliger des dégats", 20),
         ],
-        abilities=Ability("Protéger", "Il lance une pierre devant un de ses collégues, ce qui empêche toute attaque")
+        abilities=[
+            Ability("Protéger", "Il lance une pierre devant un de ses collégues, ce qui empêche toute attaque")
+        ]
         ),
         Unit("Serpent ", "feuille", 60, 5, 
         attacks=[
-            Attack("etranglement en guillotine", "Le serpent t'étrangle", 35),
+            Attack("Etranglement en guillotine", "Le serpent étrangle l'unité.", 35),
             Attack("Morsure", "Le serpent tempoisonne, l'unité perd alors 20 pv par tour", 20),
-
         ],
-        abilities=Ability("Soin","Ce serpent est aussi un serpent radioactif, il peut alors soigner de 20 pv une de vos unités")
+        abilities=[
+            Ability("Soin","Ce serpent est aussi un serpent radioactif, il peut alors soigner de 20 pv une de vos unités")
+        ]
         )
     ])
 ]
