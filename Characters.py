@@ -2,7 +2,7 @@ from packages import *
 
 Characters = [
     Character("Urart", [ # list of Unit instances
-        Unit("Minibombe", "Feu", 80, 5, 
+        Unit(name="Minibombe", Unittype="Feu", maxHealth=80, maxDistance=5, 
         attacks=[ # list of Attack instances
             Attack("Explosion Grotesque", "Cette attaque est une attaque trés forte mais l'unité minibombe meurre lors de l'attaque", 90),
             Attack("C4", "Cette attaque peut s'utiliser à distance (de 3 cases max) car la minibombe lance un C4 sur son adversaire ", 30),
