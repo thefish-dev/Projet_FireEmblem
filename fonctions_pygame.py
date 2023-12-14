@@ -105,3 +105,26 @@ def modificate_list_position(lst_position,coordonate_base,coordonate_want) :
             lst_modificate.append(lst_position[i])
     return lst_modificate
 
+def search_elem_in_choix_joueur_by_coordonate(choix_joueur,coordonate) :
+    lst=["Joueur1","Joueur2"]
+    for j in range (len(lst)) :
+        for i in range (len(choix_joueur[j])) :
+            if coordonate==(choix_joueur[lst[j]][i].rect.x,choix_joueur[lst[j]][i].rect.y) :
+                return lst[j], i
+    return None
+
+
+def delete_elem_graphique(choix_joueur,place_delete) :
+    delete=choix_joueur[search_elem_in_choix_joueur_by_coordonate(choix_joueur,place_delete)]
+    choix_joueur=choix_joueur[delete[0]].pop(delete[1])
+    return choix_joueur
+
+def close_elem_of_unit(coordonate,autre_joueur,choix_joueur,case_max) :
+    close_elem=[]
+    for i in range (len(choix_joueur[autre_joueur])) :
+        if compte_case(coordonate,(choix_joueur[autre_joueur][i].rect.x,choix_joueur[autre_joueur][i].rect.y)) <=case_max :
+            close_elem.append(choix_joueur[choix_joueur])
+    return close_elem
+
+
+

@@ -329,7 +329,9 @@ while running:
                                         choix_tour_joueur="Joueur1"
                                         lst_position_joueur_2=modificate_list_position(lst_position_joueur_2,coordonate_base,coordonate_want)
 
-                                        choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement) 
+                                        choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement)
+                                        
+                                         
                 
                 
     background.fill((0,0,0))  # Remplir l'écran avec une couleur de fond
