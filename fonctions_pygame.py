@@ -52,7 +52,7 @@ def search_element(choix_joueur,coordonnée) :
 def search_coordinate(coordonate) :
     possible_coordonate_x=[(100+i*60) for i in range (10)]
     possible_coordonate_y=[(100+i*60) for i in range (10)]
-    if coordonate[0]<100 or coordonate[0]>700 or coordonate[1]<100 or coordonate[1]>700 :
+    if coordonate[0]<40 or coordonate[0]>700 or coordonate[1]<40 or coordonate[1]>700 :
         return None
     else :
         for i in range (len(possible_coordonate_x)) :
