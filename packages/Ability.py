@@ -12,11 +12,11 @@ class Ability:
     def Run(self, author, target):
         if self.target == "ally":
             if target.team == author.team:
-                return self.effect(target)
+                return self.effect(author, target)
 
         elif self.target == "enemy":
             if target.team != author.team:
-                return self.effect(target)
+                return self.effect(author, target)
                 
         elif self.target == "self":
             return self.effect(author)

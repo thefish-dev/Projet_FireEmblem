@@ -8,7 +8,7 @@ def protect(author, target):
     target.shield = 1
     return f"Vous avez protégé {target.name}" 
 
-def shield(author, target):
+def shield(target):
     target.shield = 1
     return "Vous vous êtes appliqué un bouclier. Vous pourrez désormais résistez à la prochaine attaque."
 
@@ -16,10 +16,10 @@ def blind(author, target):
     target.can_attack = 1
     return f"{target.name} est maintenant aveuglé, il ne pourra plus attaquer."
 
-def vol(author, target):
+def rob(author, target):
     attacks = target.attacks
-    random_attack = attacks[random.randint(0, len(attacks)-1)]
-    
+    random_attack = random.choice(attacks)
+
     attacks.remove(random_attack)
     author.attacks += [random_attack]
 
@@ -42,6 +42,6 @@ abilities = {
     },
     "Vol": {
         "target": "enemy",
-        "effect": vol
+        "effect": rob
     },
 }

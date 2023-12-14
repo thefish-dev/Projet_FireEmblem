@@ -19,7 +19,7 @@ char1 = Characters[0]
 currentLoc = 0
 for unit in char1.units:
     unit.set_team("blue")
-    game.place_unit(unit, (0,currentLoc))
+    game.place_unit(unit, (1,currentLoc))
     currentLoc += 5
 
 name2 = "B"
@@ -27,7 +27,7 @@ char2 = Characters[1]
 currentLoc = 0
 for unit in char1.units:
     unit.set_team("red")
-    game.place_unit(unit, (9,currentLoc))
+    game.place_unit(unit, (8,currentLoc))
     currentLoc += 5
 
 
@@ -145,6 +145,7 @@ def displayFinalScore():
 
 
 clearConsole()
+game.generate_obstacles(5)
 
 #
 # Main loop
