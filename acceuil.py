@@ -2,7 +2,7 @@ import pygame
 from pygame import *
 import sys
 from random import randint
-
+from fonctions_pygame import *
 
 # Initialisation de Pygame
 pygame.init()
@@ -79,6 +79,10 @@ demande_perso = pygame.font.SysFont("monospace",30)
 image_text = demande_perso.render('Joueur 1 :choisissez votre personnage ', True, colors["blue"])
 image_text2 = demande_perso.render('Joueur 2 :choisissez votre personnage ', True, colors["blue"])
 
+text_tour_1="Joueur 1 :c est a vous de jouer CHEF"
+text_tour_2="Joueur :c est a vous de jouer CHEF "
+tour_joueur1=demande_perso.render(text_tour_1, True, colors["blue"])
+
 
 
 #Description des unités
@@ -94,6 +98,8 @@ print_unit2=affichage.render('Unit 2',True,colors["black"])
 Unit3_descripion= description.render('Equipe visieuse car le gros stone peut proteger  Serpent, car ce denier n a pas', True, colors["blue"])
 Unit3_descripion_p_2= description.render('beaucoup de vie contrairement a ce gros tank de Stone,Serpent peut soigner',True, colors["blue"])
 print_unit3=affichage.render('Unit 3',True,colors["black"])
+
+
 
 text_erreur_joueur=affichage_erreur.render('Equipe déja choisit par le joueur 1',True, colors["white"])
 text_erreur='Equipe déja choisit par le joueur 1'
@@ -258,74 +264,7 @@ pygame.display.set_caption("Fire emblem")
 carre=element("./Images/carre.JPG",(60,60))
 contour=element("./Images/contour.png",(700,700))
 fond = element("./Images/fond.png",(800,800))
-
-def detecte_obstacle(choix_joueur,coordonnée : tuple) :
-    pas_obstacle=True
-    for i in range(len(choix_joueur["Joueur1"])) :
-        if coordonnée== ((choix_joueur["Joueur1"][i].rect.x,choix_joueur["Joueur1"][i].rect.y)) :
-            pas_obstacle=False
-        elif coordonnée== ((choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y)) :
-            pas_obstacle=False
-    return pas_obstacle
-
-def create_obstacle(choix_joueur) :
-    obstacle_aléatoire= [0,0]
-    lst_coordonnée_possible_x=[(100+i*60) for i in range (10)]
-    lst_coordonnée_possible_y=[(100+i*60) for i in range (10)]
-    trouver_place_obstacle=True
-
-    while trouver_place_obstacle :
-        essaie=(lst_coordonnée_possible_x[randint(0,9)],lst_coordonnée_possible_x[randint(0,9)])
-        if detecte_obstacle(choix_joueur,essaie) :
-            trouver_place_obstacle=False
-    return essaie
-
-def supprimer_élement(choix_joueur,joueur,coordonnée) : 
-    for i in range (len(choix_joueur[joueur])) :
-        if choix_joueur[joueur][i]==coordonnée :
-            choix_joueur[joueur].pop(i)           
-    return choix_joueur
-
-def search_element(choix_joueur,coordonnée) :
-    for i in range(len(choix_joueur["Joueur1"])) :
-        if (choix_joueur["Joueur1"].rect.x,choix_joueur["Joueur1"].rect.y)==coordonnée :
-            return i,"Joueur1"
-        elif (choix_joueur["Joueur2"].rect.x,choix_joueur["Joueur2"].rect.y)==coordonnée :
-            return i,"Joueur2"
-    return None 
-
-#verifie dans quele carré le joueur clique
-def search_coordinate(coordonate) :
-    possible_coordonate_x=[(100+i*60) for i in range (10)]
-    possible_coordonate_y=[(100+i*60) for i in range (10)]
-    if coordonate[0]<100 or coordonate[0]>640 or coordonate[1]<100 or coordonate[1]>640 :
-        return None
-    else :
-        for i in range (len(possible_coordonate_x)) :
-            for j in range (len(possible_coordonate_y)) :
-                if (coordonate[0]>=possible_coordonate_x[j] and coordonate[0]< possible_coordonate_x[j]+60) and (coordonate[1]>=possible_coordonate_x[i] and coordonate[1]< possible_coordonate_x[i]+60) :
-                    return (possible_coordonate_x[j],possible_coordonate_y[i])
-                
-def valeur_absolue(a : int) :
-    if a>0 :
-        return a
-    else :
-        return -a
-
-#utilisation des vecteurs pour savoir si l'unité est en mesure de se déplacer sur la case souhaitée : Xb - Xa)/60 pour l'abcisse 
-# (Yb-Ya)/60 pour l'ordonnée, la somme de la valeur absolue des deux  sont le nombre totale de case déplacépour connaitre le nombre totale 
-# de case déplacé, on divise par 60 car un carré fais, 60 pixels sur 60 pixels                   
-def compte_case(coordonnée_base,transform) :
-    x_total=(transform[0]- coordonnée_base[0])/60
-    y_totlal=(transform[1]- coordonnée_base[1])/60
-    return (valeur_absolue(x_total)+valeur_absolue(y_totlal))
-
-def déplacemet_total(coordonnée_base,transform) :
-    x_total=(transform[0]- coordonnée_base[0])/60
-    y_totlal=(transform[1]- coordonnée_base[1])/60
-    return (x_total,y_totlal)
-
-    
+   
 
  
 
@@ -343,6 +282,9 @@ while len(lst_position_obstacle) <5 :
         lst_position_obstacle.append(essaie)
 print(lst_position_obstacle)
 
+clique_droit=0
+case_maxi=4
+
 # Boucle de jeu
 running = True
 while running:
@@ -351,11 +293,23 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:  
-
-            mouse_pos = pygame.mouse.get_pos()  
-            if 100 <= mouse_pos[0] <= 300 and \
-               430 <= mouse_pos[1] <= 630 :
-                pass
+            clique_droit+=1
+            if clique_droit==1 :
+                mouse_pos_unit = pygame.mouse.get_pos()
+            elif clique_droit==2 :
+                clique_droit=0
+                mouse_pose_want=pygame.mouse.get_pos()
+                coordonate_base=search_coordinate((mouse_pos_unit[0],mouse_pos_unit[1]))              
+                coordonate_want=search_coordinate((mouse_pose_want[0],mouse_pose_want[1]))
+                elem_move=search_element(choix_joueur,coordonate_base)
+                if elem_move is not None :       
+                    if coordonate_want is not None :        
+                        case_max=compte_case(coordonate_base,coordonate_want)
+                        deplacement=déplacemet_total(coordonate_base,coordonate_want)
+                        if case_max<=case_maxi :                            
+                            if detecte_obstacle(choix_joueur,lst_position_obstacle,coordonate_want)  :
+                                choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement) 
+                
     background.fill((0,0,0))  # Remplir l'écran avec une couleur de fond
     background.blit(fond,(0,0))
     background.blit(contour,(50,50))
