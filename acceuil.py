@@ -281,10 +281,18 @@ while len(lst_position_obstacle) <5 :
     if essaie  not in lst_position_obstacle :
         lst_position_obstacle.append(essaie)
 print(lst_position_obstacle)
+lst_position_joueur_1=[]
+lst_position_joueur_2=[]
+for i in range (len(choix_joueur["Joueur1"])) :
+    lst_position_joueur_1.append((choix_joueur["Joueur1"][i].rect.x,choix_joueur["Joueur1"][i].rect.y))
+for i in range (len(choix_joueur["Joueur2"])) :
+    lst_position_joueur_2.append((choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y))
 
+
+print(lst_position_joueur_1)
 clique_droit=0
 case_maxi=4
-
+choix_tour_joueur="Joueur1"
 # Boucle de jeu
 running = True
 while running:
@@ -306,9 +314,23 @@ while running:
                     if coordonate_want is not None :        
                         case_max=compte_case(coordonate_base,coordonate_want)
                         deplacement=déplacemet_total(coordonate_base,coordonate_want)
-                        if case_max<=case_maxi :                            
+                        if case_max<=case_maxi :
+                            
                             if detecte_obstacle(choix_joueur,lst_position_obstacle,coordonate_want)  :
-                                choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement) 
+                                if choix_tour_joueur=="Joueur1" :
+                                    if coordonate_base in lst_position_joueur_1 :
+                                        choix_tour_joueur="Joueur2"
+                                        lst_position_joueur_1=modificate_list_position(lst_position_joueur_1,coordonate_base,coordonate_want)
+                                        
+
+                                        choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement) 
+                                elif choix_tour_joueur=="Joueur2" :
+                                    if coordonate_base in lst_position_joueur_2 :
+                                        choix_tour_joueur="Joueur1"
+                                        lst_position_joueur_2=modificate_list_position(lst_position_joueur_2,coordonate_base,coordonate_want)
+
+                                        choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement) 
+                
                 
     background.fill((0,0,0))  # Remplir l'écran avec une couleur de fond
     background.blit(fond,(0,0))

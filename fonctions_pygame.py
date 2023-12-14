@@ -95,3 +95,13 @@ def search_coordinate2(coordonate) :
             for j in range (len(possible_coordonate_y)) :
                 if (coordonate[0]>=possible_coordonate_x[j] and coordonate[0]< possible_coordonate_x[j]+60) and (coordonate[1]>=possible_coordonate_x[i] and coordonate[1]< possible_coordonate_x[i]+60) :
                     return (possible_coordonate_x[j],possible_coordonate_y[i])
+                
+def modificate_list_position(lst_position,coordonate_base,coordonate_want) :
+    lst_modificate=[]
+    for i in range (len(lst_position)) :
+        if lst_position[i]==coordonate_base :
+            lst_modificate.append(coordonate_want)
+        else :
+            lst_modificate.append(lst_position[i])
+    return lst_modificate
+
