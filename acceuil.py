@@ -35,9 +35,7 @@ class Elem_Graphique(pygame.sprite.Sprite):
         return var
     def __str__(self) -> str:
         return super().__str__()
-
-
-
+ 
 
 #Pour l'affichage du text
 choix_joueur_1=True
@@ -141,6 +139,9 @@ temp_actuel=0
 lst_perso=[bombe,mage,singe,dustin_poirier,stone,serpent]
 perso_x_y=[(110,540),(200,540),(320,540),(420,540),(530,540),(630,540)]
 
+# Musique du menu
+pygame.mixer.music.load ("sounds/menu.mp3") 
+pygame.mixer.music.play(-1)
 
 # Boucle de jeu
 running = True
@@ -250,7 +251,38 @@ while running:
 # Quitter Pygame
 pygame.quit()
 
+# Musique du menu
 print(choix_joueur)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 playing=True 
 
@@ -293,6 +325,11 @@ print(lst_position_joueur_1)
 clique_droit=0
 case_maxi=4
 choix_tour_joueur="Joueur1"
+
+# Musique du jeu
+pygame.mixer.music.load("sounds/fight_music.mp3")
+pygame.mixer.music.play(-1)
+
 # Boucle de jeu
 running = True
 while running:

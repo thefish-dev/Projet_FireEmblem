@@ -32,7 +32,7 @@ Characters = [
         Unit("Dustin Poirier", "Punch", 60, 5, 
         attacks=[
             Attack("Ground and pound", "Cette attaque est agressive et puissante mais elle necessite d'étre proche pour étre utiliser (1 case)", 35),
-            Attack("étranglement en guillotine : ataque trés puisante , il ne faut pas mettre en rage dustin Poirier : 60 dégat", 60),
+            Attack("étranglement en guillotine : ataque trés puisante , il ne faut pas mettre en rage dustin Poirier", 60)
         ],
         abilities=None
         )

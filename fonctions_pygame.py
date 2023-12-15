@@ -1,4 +1,5 @@
 from random import randint
+from math import *
 
 def detecte_obstacle(choix_joueur,lst_obstacle,coordonnée : tuple) :
     pas_obstacle=True
@@ -61,10 +62,7 @@ def search_coordinate(coordonate) :
                     return (possible_coordonate_x[j],possible_coordonate_y[i])
                 
 def valeur_absolue(a : int) :
-    if a>0 :
-        return a
-    else :
-        return -a
+    return abs(a)
 
 #utilisation des vecteurs pour savoir si l'unité est en mesure de se déplacer sur la case souhaitée : Xb - Xa)/60 pour l'abcisse 
 # (Yb-Ya)/60 pour l'ordonnée, la somme de la valeur absolue des deux  sont le nombre totale de case déplacépour connaitre le nombre totale 
