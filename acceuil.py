@@ -254,6 +254,36 @@ pygame.quit()
 # Musique du menu
 print(choix_joueur)
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 playing=True 
 
 pygame.init()
