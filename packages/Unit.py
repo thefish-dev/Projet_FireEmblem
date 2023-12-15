@@ -1,21 +1,51 @@
 from .Attack import Attack
 from .Ability import Ability
+from pygame import *
+import pygame
 
 from random import randint
 
-class Unit:
-    def __init__(self, name: str, unitType: str, maxHealth: int, maxDistance: int, attacks: list, abilities: (list or None)):
-        self.name = name
-        self.type = unitType
-        self.__maxHealth = maxHealth
-        self.attacks = attacks
-        self.abilities = abilities
-        self.maxDistance = maxDistance
+class Unit(pygame.sprite.Sprite) :
+    def __init__(self,position_x,position_y,chemin):
+        
+        self.name = ""
+        self.type = ""
+        self.__maxHealth = 0
+        self.attacks = ""
+        self.abilities = ""
+        self.maxDistance = ""
 
         self.team = 0
-        self.health = self.__maxHealth
+        self.health = ""
         self.shield = 0
         self.can_attack = 0
+        super().__init__()
+        self.image= self.element(chemin,(60,60))
+        self.rect = self.image.get_rect()
+        self.rect.x = position_x # Position initiale x
+        self.rect.y = position_y  # Position initiale y
+    
+    def droite (self) :
+        if self.rect.x<640 :
+            self.rect.x += 60
+    def gauche(self) :
+        if self.rect.x>100 :
+            self.rect.x-=60
+    def monter (self) :
+        if self.rect.y>100 :
+            self.rect.y-=60
+    def descendre (self) : 
+        if self.rect.y <640 :
+            self.rect.y+=60
+
+
+    def element(self,chemin,tall) :
+        var=image.load(chemin)
+        var=var.convert_alpha()
+        var=transform.scale(var,tall)
+        return var
+    def __str__(self) -> str:
+        return super().__str__()
 
     def __str__(self):
         return self.name
@@ -67,4 +97,20 @@ class Unit:
             power += attack.damages
             medium += 1
         return power // medium
-        
+
+{"bombe" :["bombe","feu",100,"tu peux mettre les attques correspondant a bombe stp","pareil pour les abillités","tu pourras crée un fonction pour enlever la vie, et la vie correspondra a sa"]}
+#tu peut faire sa pour chaque perssonnage
+#fonction a crée : si le joueur à toujours de la vie, le nombre de fois que une unité peut utiliser une abillities
+#adapt les fonctions a pygame si besoin genre par exemple, les text ne sont plus des chaines de charactére, mais des text graphique a afficher
+#tu pouuras regrder dans acceuil, il y a des exemples
+#la fonction peut attquer ce sera si une unité adverse est a une distance assez proche de l'unité jouer, tu pourra utiliser la 
+#pour rappel toute les unité de la map ainsi que leur position sont dans le dictionnaire choix_joueur dans acceuil
+
+#En gros a la fin il me faudrait un code qui selectionne une unité, regarde si elle peut les attquer aux alentours en fonction de la portée
+#  des attques, si oui alors propose ls attaques, propose d'en choisir une, propose au second joueur si une de ses abilité peut l'aider a detournez
+#l'attaque si possible, si non modifie la vie de l'unité et tej la si elle a plus de vie(tu le supprime juste de cjoix_perso)
+#
+
+#FAIS LE JE T'EN SUPPLIE 
+
+
