@@ -85,6 +85,12 @@ def MAIN(choix_joueur):
 
                                             choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement)
                                             if close_elem_of_unit(coordonate_want,"Joueur2",choix_joueur,1) != [] :
+                                                if event.type==pygame.MOUSEBUTTONDOWN:
+                                                    coordonate_attack=pygame.mouse.get_pos()
+                                                    coordonate_attack=search_coordinate((coordonate_attack[0],coordonate_attack[1]))
+                                                    if coordonate_attack in (choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y) :
+                                                        attaque=1
+                                                        print("jenna")
 
                                                 attaque=1
                                     elif choix_tour_joueur=="Joueur2" :

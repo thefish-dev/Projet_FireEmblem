@@ -248,10 +248,10 @@ def affiche_abillities (perso,unit) :
     return [image_text,image_text2]
 
 def health_bar(surface,choix_joueur,joueur) :
-    position_health=[[(810,220),(860,220)],[(930,220),(980,220)],[(1050,220),(1100,220)],[(810,280),(860,280)],[(930,280),(980,280)],[(1050,280),(1100,280)],[(810,340),(860,340)]]
+    position_health=[[(810,270),(900,290)],[(1010,270),(1100,290)],[(1210,270),(1300,290)],[(810,350),(900,370)],[(1010,350),(1100,370)],[(1210,350),(1300,370)],[(810,430),(900,450)]]
     for i in range (len(choix_joueur[joueur])) :
         surface.blit(choix_joueur[joueur][i].image,(position_health[i][0]))
-        pygame.draw.rect(surface, (100,0,0), (position_health[i], 530, 200, 100))
+        pygame.draw.rect(surface, (0,100,0), (position_health[i][1][0], position_health[i][1][1], 100, 30))
 
 
     
