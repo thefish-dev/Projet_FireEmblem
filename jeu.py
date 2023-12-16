@@ -6,7 +6,6 @@ from fonctions_pygame import *
 
 
 def MAIN(choix_joueur):
-    playing=True 
 
     pygame.init()
 
