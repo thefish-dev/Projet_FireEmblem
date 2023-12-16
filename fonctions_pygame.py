@@ -5,8 +5,42 @@ import pygame
 
 lst_perso_attack={"unit1":["bombe","mage"],"unit2":["dustin_poirier","singe"],"unit3":["stone","serpent"]}
 
+#Fonction pour charger les images plus rapidement
+def element(chemin,tall) :       
+        var=pygame.image.load(chemin)
+        var=var.convert_alpha()
+        var=pygame.transform.scale(var,tall)
+        return var
+
+class Elem_Graphique(pygame.sprite.Sprite):
+    def __init__(self,position_x,position_y,chemin):
+        super().__init__()
+        self.image= element(chemin,(60,60))
+        self.rect = self.image.get_rect()
+        self.rect.x = position_x # Position initiale x
+        self.rect.y = position_y  # Position initiale y
+    
+    def droite (self) :
+        if self.rect.x<640 :
+            self.rect.x += 60
+    def gauche(self) :
+        if self.rect.x>100 :
+            self.rect.x-=60
+    def monter (self) :
+        if self.rect.y>100 :
+            self.rect.y-=60
+    def descendre (self) : 
+        if self.rect.y <640 :
+            self.rect.y+=60
 
 
+    def element(self,chemin,tall) :
+        var=image.load(chemin)
+        var=var.convert_alpha()
+        var=transform.scale(var,tall)
+        return var
+    def __str__(self) -> str:
+        return super().__str__()
 
 position_attaque=[(980,40),(870,100),(870,115),(870,200),(870,215)]
 
