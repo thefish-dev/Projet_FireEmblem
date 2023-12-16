@@ -213,8 +213,11 @@ def affiche_abillities (perso,unit) :
         image_text2=demande_perso.render("alors esquiver des attaques, mais pas tout le TEMPS !",True,colors["blue"])
     return [image_text,image_text2]
 
-def health_bar(surface,choix_joueur) :
+def health_bar(surface,choix_joueur,joueur) :
     position_health=[[(810,220),(860,220)],[(930,220),(980,220)],[(1050,220),(1100,220)],[(810,280),(860,280)],[(930,280),(980,280)],[(1050,280),(1100,280)],[(810,340),(860,340)]]
+    for i in range (len(choix_joueur[joueur])) :
+        surface.blit(choix_joueur[joueur][i].image,(position_health[i][0]))
+        pygame.draw.rect(surface, (100,0,0), (position_health[i], 530, 200, 100))
 
 
     
