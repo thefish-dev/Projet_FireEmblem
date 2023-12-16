@@ -304,6 +304,8 @@ choix_tour_joueur="Joueur1"
 pygame.mixer.music.load("sounds/fight_music.mp3")
 pygame.mixer.music.play(-1)
 
+attaque=0
+
 # Boucle de jeu
 running = True
 while running:
@@ -332,9 +334,10 @@ while running:
                                     if coordonate_base in lst_position_joueur_1 :
                                         choix_tour_joueur="Joueur2"
                                         lst_position_joueur_1=modificate_list_position(lst_position_joueur_1,coordonate_base,coordonate_want)
+                                        choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement)
                                         
+                                            
 
-                                        choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement) 
                                 elif choix_tour_joueur=="Joueur2" :
                                     if coordonate_base in lst_position_joueur_2 :
                                         choix_tour_joueur="Joueur1"

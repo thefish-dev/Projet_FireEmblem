@@ -2,7 +2,6 @@ import pygame
 import sys
 from fonctions_pygame import *
 from pygame import*
-import Characters
 
 
 

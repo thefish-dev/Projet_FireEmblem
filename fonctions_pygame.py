@@ -3,6 +3,15 @@ from math import *
 from pygame import *
 import pygame
 
+lst_perso_attack={"unit1":["bombe","mage"],"unit2":["dustin_poirier","singe"],"unit3":["stone","serpent"]}
+
+
+
+
+position_attaque=[(980,40),(870,100),(870,115),(870,200),(870,215)]
+
+unit_chose="unit2"
+
 def detecte_obstacle(choix_joueur,lst_obstacle,coordonnée : tuple) :
     pas_obstacle=True
     for i in range(len(choix_joueur["Joueur1"])) :
@@ -123,11 +132,11 @@ def close_elem_of_unit(coordonate,autre_joueur,choix_joueur,case_max) :
     close_elem=[]
     for i in range (len(choix_joueur[autre_joueur])) :
         if compte_case(coordonate,(choix_joueur[autre_joueur][i].rect.x,choix_joueur[autre_joueur][i].rect.y)) <=case_max :
-            close_elem.append(choix_joueur[choix_joueur])
+            close_elem.append(choix_joueur[autre_joueur][i])
     return close_elem
 
 def affiche_attaque(perso,unit) :
-    demande_perso = pygame.font.SysFont("monospace",12)
+    demande_perso = pygame.font.SysFont("monospace",14)
     colors = {
     "blue" : (0,255,255),
     "red" : (255,0,0),
@@ -203,6 +212,10 @@ def affiche_abillities (perso,unit) :
         image_text=demande_perso.render("Serpent est doté d'une agilité deconsertante, il peut")
         image_text2=demande_perso.render("alors esquiver des attaques, mais pas tout le TEMPS !",True,colors["blue"])
     return [image_text,image_text2]
+
+def health_bar(surface,choix_joueur) :
+    position_health=[[(810,220),(860,220)],[(930,220),(980,220)],[(1050,220),(1100,220)],[(810,280),(860,280)],[(930,280),(980,280)],[(1050,280),(1100,280)],[(810,340),(860,340)]]
+
 
     
 

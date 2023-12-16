@@ -6,6 +6,8 @@ from fonctions_pygame import *
 
 
 
+
+
 # Initialisation de Pygame
 pygame.init()
 class Elem_Graphique(pygame.sprite.Sprite):
@@ -264,7 +266,7 @@ pygame.init()
 
 # Définition de la taille de la fenêtre
 
-background = pygame.display.set_mode((800, 800))
+background = pygame.display.set_mode((1500, 800))
 pygame.display.set_caption("Fire emblem")
 
 carre=element("./Images/carre.JPG",(60,60))
@@ -299,11 +301,16 @@ print(lst_position_joueur_1)
 clique_droit=0
 case_maxi=4
 choix_tour_joueur="Joueur1"
+fond_attaque=element("./Images/fond_attaque.png",(700,800))
+wednesday_attack=element("./Images/mercredi.png",(120,200))
+thing=element("./Images/the_thing.png",(40,40))
+bulle=element("./Images/bulle.png",(170,135))
+text_bulle=element("./Images/text_bulle.png",(120,60))
 
 # Musique du jeu
 pygame.mixer.music.load("sounds/fight_music.mp3")
 pygame.mixer.music.play(-1)
-
+attaque=0
 # Boucle de jeu
 running = True
 while running:
@@ -334,13 +341,18 @@ while running:
                                         lst_position_joueur_1=modificate_list_position(lst_position_joueur_1,coordonate_base,coordonate_want)
                                         
 
-                                        choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement) 
+                                        choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement)
+                                        if close_elem_of_unit(coordonate_want,"Joueur2",choix_joueur,1) != [] :
+
+                                            attaque=1
                                 elif choix_tour_joueur=="Joueur2" :
                                     if coordonate_base in lst_position_joueur_2 :
                                         choix_tour_joueur="Joueur1"
                                         lst_position_joueur_2=modificate_list_position(lst_position_joueur_2,coordonate_base,coordonate_want)
 
                                         choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement)
+                                        if close_elem_of_unit(coordonate_want,"Joueur1",choix_joueur,1) != [] :                                   
+                                            attaque=1
                                         
                                          
                 
@@ -358,6 +370,19 @@ while running:
         background.blit(choix_joueur["Joueur2"][i].image,(choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y))
     for i in range (len(lst_obstacle)) :
         background.blit(lst_obstacle[i],(lst_position_obstacle[i][0],lst_position_obstacle[i][1]))
+    if attaque==1 :
+        print(unit_chose)
+        pygame.draw.rect(background, (0,0,0), (800, 0, 700, 800))
+        background.blit(fond_attaque,(800,0))
+        background.blit(wednesday_attack,(900,600))
+        background.blit(thing,(1150,560))
+        background.blit(bulle,(970,480))
+        background.blit(text_bulle,(1000,510))
+        pygame.draw.rect(background, (255,0,0), (810, 100, 60, 30))
+        pygame.draw.rect(background, (0,255,0), (810, 200, 60, 30)) 
+        for i in range (5) :
+            background.blit(affiche_attaque(unit_chose,lst_perso_attack[unit_chose][1])[i],position_attaque[i])
+
 
     
     
