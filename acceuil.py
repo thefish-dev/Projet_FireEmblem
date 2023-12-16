@@ -4,6 +4,8 @@ import sys
 from random import randint
 from fonctions_pygame import *
 
+
+
 # Initialisation de Pygame
 pygame.init()
 class Elem_Graphique(pygame.sprite.Sprite):
@@ -253,34 +255,6 @@ pygame.quit()
 
 # Musique du menu
 print(choix_joueur)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

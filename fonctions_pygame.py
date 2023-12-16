@@ -1,5 +1,7 @@
 from random import randint
 from math import *
+from pygame import *
+import pygame
 
 def detecte_obstacle(choix_joueur,lst_obstacle,coordonnée : tuple) :
     pas_obstacle=True
@@ -123,6 +125,86 @@ def close_elem_of_unit(coordonate,autre_joueur,choix_joueur,case_max) :
         if compte_case(coordonate,(choix_joueur[autre_joueur][i].rect.x,choix_joueur[autre_joueur][i].rect.y)) <=case_max :
             close_elem.append(choix_joueur[choix_joueur])
     return close_elem
+
+def affiche_attaque(perso,unit) :
+    demande_perso = pygame.font.SysFont("monospace",12)
+    colors = {
+    "blue" : (0,255,255),
+    "red" : (255,0,0),
+    "vert" :(0,255,0),
+    "black" : (0,0,0),
+    "white" : (255,255,255)
+    }
+    if perso == "unit1" and unit=="bombe" :
+        image_text = demande_perso.render('Vous pouvez attaquez votre adversaire : ', True, colors["white"])
+        image_text2 = demande_perso.render("Explosion Grotesque :Cette attaque est une attaque trés forte mais " , True, colors["blue"])
+        image_text3=demande_perso.render(" l unité minibombe meurre lors de l attaque : 90 dégat" , True, colors["blue"])
+        image_text4 = demande_perso.render("C4, Cette attaque peut s'utiliser à distance (de 3 cases max) car la minibombe  " , True, colors["blue"])
+        image_text5 = demande_perso.render("lance un C4 sur son adversaire : 30 dégats" , True, colors["blue"])
+    if perso== "unit1" and unit == "mage" :
+         image_text = demande_perso.render('Vous pouvez attaquez votre adversaire : ', True, colors["blue"])
+         image_text2 = demande_perso.render("Coup de foudre Cette attaque electrocute une unité, vous pouvez l'utiliser" , True, colors["blue"])
+         image_text3 = demande_perso.render(" à une distance de 2 case max : 20 dégats" , True, colors["blue"])
+         image_text4 = demande_perso.render("",True,colors["blue"])
+         image_text5 = demande_perso.render("",True,colors["blue"])
+    if perso=="unit2" and unit=="dustin_poirier" :
+        image_text = demande_perso.render('Vous pouvez attaquez votre adversaire : ', True, colors["blue"])
+        image_text2 = demande_perso.render("étranglement en guillotine : ataque trés puisante , il ne faut pas" , True, colors["blue"])
+        image_text3 = demande_perso.render("mettre en rage dustin Poirier : 60 dégat" , True, colors["blue"])
+        image_text4 = demande_perso.render("Ground and pound, Cette attaque est agressive et puissante mais elle  ",True, colors["blue"])
+        image_text5 = demande_perso.render("necessite d'étre proche pour étre utiliser (1 case) : 30 dégats",True, colors["blue"])
+    if perso =='unit2' and unit=="singe" :
+        image_text = demande_perso.render('Vous pouvez attaquez votre adversaire : ', True, colors["blue"])
+        image_text2 = demande_perso.render("Coup de chico super chockbar,  le singe n'est pas content ,attaque plutot " , True, colors["blue"])
+        image_text3 = demande_perso.render("proche (2cases): 30 dégats" , True, colors["blue"])
+        image_text4 = demande_perso.render("Coup de pied retourné en highkick : une puissance de zinzin, attaque  ", True, colors["blue"])
+        image_text5 = demande_perso.render("plutot proche (2 cases) : 60 dégat", True, colors["blue"])
+
+    if perso=="unit3" and unit=="stone" :
+        image_text = demande_perso.render('Vous pouvez attaquez votre adversaire : ', True, colors["blue"])
+        image_text2 = demande_perso.render("Charge, une pierre te fonce dessus à une vitesse gargantuesque, peut attaquer" , True, colors["blue"])
+        image_text3 = demande_perso.render("de loin (4 cases): 30 dégats" , True, colors["blue"])
+        image_text4 = demande_perso.render("Tremblement de terre, ce gros bonhome tape des pied mais il fais le poid de ",True, colors["blue"])
+        image_text5 = demande_perso.render("pantagruel, peut attaquer de loin (3 cases),: 20 dégats",True, colors["blue"])
+    if perso=="unit3" and unit=="serpent" :
+        image_text = demande_perso.render('Vous pouvez attaquez votre adversaire : ', True, colors["blue"])
+        image_text2 = demande_perso.render("Etranglement en guillotine,le serpent t'attaque avec ses gros muscle de zinzin, ataque" , True, colors["blue"])
+        image_text3 = demande_perso.render("proche(1 case): 30 dégats" , True, colors["blue"])
+        image_text4 = demande_perso.render("Morsure, le serpent te mord car il a les crocs comme arthur attaque puissannte plutot",True, colors["blue"])
+        image_text5 = demande_perso.render("proche : 70 dégats",True, colors["blue"])
+
+    return [image_text,image_text2,image_text3,image_text4,image_text5]
+
+def affiche_abillities (perso,unit) :
+    demande_perso = pygame.font.SysFont("monospace",12)
+    colors = {
+    "blue" : (0,255,255),
+    "red" : (255,0,0),
+    "vert" :(0,255,0),
+    "black" : (0,0,0),
+    "white" : (255,255,255)
+    }
+    if perso=="unit1" and unit=="bombe" :
+        image_text=demande_perso.render("Vous pouvez soignez un d vos compatriote, cliquer sur lui",True,colors["blue"])
+        image_text2=demande_perso.render("Vous ne pouurez pas le faire indefiniment",True,colors["blue"])
+    if perso=="unit1" and unit=="mage" :
+        image_text=demande_perso.render("Au prochain tour vous attaqerez avec une attaque aléatoire",True,colors["blue"])
+        image_text2=demande_perso.render("que vous volez à une unité",True,colors["blue"])
+    if perso =="uit2" and unit == "dustin_poirier" :
+        image_text=None
+        image_text2=None
+    if perso == "unit2"  and unit == "singe" :
+        image_text=None
+        image_text2=None
+    if perso == "unit3" and unit== "stone" :
+        image_text=demande_perso.render("Stone est capale de protéger l'une de vos unité pour la ",True,colors["blue"])
+        image_text2=demande_perso.render("prochaine fois que cette derniere ce fera attaquer",True,colors["blue"])
+    if perso== "unit3" and unit == "serpent" :
+        image_text=demande_perso.render("Serpent est doté d'une agilité deconsertante, il peut")
+        image_text2=demande_perso.render("alors esquiver des attaques, mais pas tout le TEMPS !",True,colors["blue"])
+    return [image_text,image_text2]
+
+    
 
 
 

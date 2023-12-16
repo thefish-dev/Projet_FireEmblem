@@ -2,6 +2,17 @@ import pygame
 import sys
 from fonctions_pygame import *
 from pygame import*
+import Characters
+
+
+
+class Attack:
+    def __init__(self, name: str, desc: str, damages: int):
+        self.name = name
+        self.desc = desc
+        self.damages = damages
+        self.critic_damage_multiplier = 2.5
+        self.critic_damage_chance = 0.3 # 3 chances sur 10
 
 # Initialisation de Pygame
 pygame.init()
@@ -23,7 +34,7 @@ def affiche_attaque(perso,unit) :
     "white" : (255,255,255)
     }
     if perso == "unit1" and unit=="bombe" :
-        image_text = demande_perso.render('Vous pouvez attaquez votre adversaire : ', True, colors["blue"])
+        image_text = demande_perso.render('Vous pouvez attaquez votre adversaire : ', True, colors["white"])
         image_text2 = demande_perso.render("Explosion Grotesque :Cette attaque est une attaque trés forte mais " , True, colors["blue"])
         image_text3=demande_perso.render(" l unité minibombe meurre lors de l attaque : 90 dégat" , True, colors["blue"])
         image_text4 = demande_perso.render("C4, Cette attaque peut s'utiliser à distance (de 3 cases max) car la minibombe  " , True, colors["blue"])
@@ -38,14 +49,14 @@ def affiche_attaque(perso,unit) :
         image_text = demande_perso.render('Vous pouvez attaquez votre adversaire : ', True, colors["blue"])
         image_text2 = demande_perso.render("étranglement en guillotine : ataque trés puisante , il ne faut pas" , True, colors["blue"])
         image_text3 = demande_perso.render("mettre en rage dustin Poirier : 60 dégat" , True, colors["blue"])
-        image_text4 = demande_perso.render("Ground and pound, Cette attaque est agressive et puissante mais elle necessite ",True, colors["blue"])
-        image_text5 = demande_perso.render(" d'étre proche pour étre utiliser (1 case) : 30 dégats",True, colors["blue"])
+        image_text4 = demande_perso.render("Ground and pound, Cette attaque est agressive et puissante mais elle  ",True, colors["blue"])
+        image_text5 = demande_perso.render("necessite d'étre proche pour étre utiliser (1 case) : 30 dégats",True, colors["blue"])
     if perso =='unit2' and unit=="singe" :
         image_text = demande_perso.render('Vous pouvez attaquez votre adversaire : ', True, colors["blue"])
         image_text2 = demande_perso.render("Coup de chico super chockbar,  le singe n'est pas content ,attaque plutot " , True, colors["blue"])
         image_text3 = demande_perso.render("proche (2cases): 30 dégats" , True, colors["blue"])
-        image_text4 = demande_perso.render("Coup de pied retourné en highkick :, une puissance de zinzin attaque plutot proche ", True, colors["blue"])
-        image_text5 = demande_perso.render("(2 cases) : 60 dégat", True, colors["blue"])
+        image_text4 = demande_perso.render("Coup de pied retourné en highkick : une puissance de zinzin, attaque  ", True, colors["blue"])
+        image_text5 = demande_perso.render("plutot proche (2 cases) : 60 dégat", True, colors["blue"])
 
     if perso=="unit3" and unit=="stone" :
         image_text = demande_perso.render('Vous pouvez attaquez votre adversaire : ', True, colors["blue"])
@@ -62,10 +73,45 @@ def affiche_attaque(perso,unit) :
 
     return [image_text,image_text2,image_text3,image_text4,image_text5]
 
+def affiche_abillities (perso,unit) :
+    demande_perso = pygame.font.SysFont("monospace",12)
+    colors = {
+    "blue" : (0,255,255),
+    "red" : (255,0,0),
+    "vert" :(0,255,0),
+    "black" : (0,0,0),
+    "white" : (255,255,255)
+    }
+    if perso=="unit1" and unit=="bombe" :
+        image_text=demande_perso.render("Vous pouvez soignez un d vos compatriote, cliquer sur lui",True,colors["blue"])
+        image_text2=demande_perso.render("Vous ne pouurez pas le faire indefiniment",True,colors["blue"])
+    if perso=="unit1" and unit=="mage" :
+        image_text=demande_perso.render("Au prochain tour vous attaqerez avec une attaque aléatoire",True,colors["blue"])
+        image_text2=demande_perso.render("que vous volez à une unité",True,colors["blue"])
+    if perso =="uit2" and unit == "dustin_poirier" :
+        image_text=None
+        image_text2=None
+    if perso == "unit2"  and unit == "singe" :
+        image_text=None
+        image_text2=None
+    if perso == "unit3" and unit== "stone" :
+        image_text=demande_perso.render("Stone est capale de protéger l'une de vos unité pour la ",True,colors["blue"])
+        image_text2=demande_perso.render("prochaine fois que cette derniere ce fera attaquer",True,colors["blue"])
+    if perso== "unit3" and unit == "serpent" :
+        image_text=demande_perso.render("Serpent est doté d'une agilité deconsertante, il peut")
+        image_text2=demande_perso.render("alors esquiver des attaques, mais pas tout le TEMPS !",True,colors["blue"])
+    return [image_text,image_text2]
+
+    
+    
+    
+
+
+
 lst_perso={"unit1":["bombe","mage"],"unit2":["dustin_poirier","singe"],"unit3":["stone","serpent"]}
 
 
-position_attaque=[(670,40),(670,100),(670,115),(670,200),(670,215)]
+position_attaque=[(780,40),(670,100),(670,115),(670,200),(670,215)]
 
 unit_chose="unit2"
 print(lst_perso["unit1"])
@@ -110,6 +156,7 @@ class Elem_Graphique(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = position_x # Position initiale x
         self.rect.y = position_y  # Position initiale y
+        self.health=100
     
     def droite (self) :
         if self.rect.x<640 :
@@ -133,6 +180,11 @@ class Elem_Graphique(pygame.sprite.Sprite):
     def __str__(self) -> str:
         return super().__str__()
 elem=[Elem_Graphique(120,120,"./Images/bombe.png")]
+fond_attaque=element("./Images/fond_attaque.png",(600,600))
+wednesday_attack=element("./Images/mercredi.png",(120,200))
+thing=element("./Images/the_thing.png",(40,40))
+bulle=element("./Images/bulle.png",(170,135))
+text_bulle=element("./Images/text_bulle.png",(120,60))
 
 case_maxi=3
 attaque=0
@@ -168,29 +220,20 @@ while running:
             print("hhhh")
             if event.key == pygame.K_SPACE:
                 attaque=1
+    
     if attaque==1 :
         pygame.draw.rect(fenetre, (0,0,0), (600, 0, 600, 600))
+        fenetre.blit(fond_attaque,(600,0))
+        fenetre.blit(wednesday_attack,(700,400))
+        fenetre.blit(thing,(820,560))
+        fenetre.blit(bulle,(770,280))
+        fenetre.blit(text_bulle,(800,310))
         pygame.draw.rect(fenetre, (255,0,0), (610, 100, 60, 30))
         pygame.draw.rect(fenetre, (0,255,0), (610, 200, 60, 30))
+        
         for i in range (5) :
-            print(position_attaque[i])
-            fenetre.blit(affiche_attaque(unit_chose,lst_perso[unit_chose][0])[i],position_attaque[i])
-            
-
-     
-
-
-
-
-            
-           
-            
-
-             
-
-                
-                
-    
+            fenetre.blit(affiche_attaque(unit_chose,lst_perso[unit_chose][1])[i],position_attaque[i])
+       
     # Dessin sur l'écran
     
     # Mettre à jour l'affichage

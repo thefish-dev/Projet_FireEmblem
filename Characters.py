@@ -2,7 +2,7 @@ from packages import *
 
 Characters = [
     Character("Urart", [ # list of Unit instances
-        Unit(name="Minibombe", unitType="Feu", maxHealth=80, maxDistance=5, 
+        Unit(name="Minibombe", unitType="Feu", maxHealth=80, maxDistance=3, 
         attacks=[ # list of Attack instances
             Attack("Explosion Grotesque", "Cette attaque est une attaque trés forte mais l'unité minibombe meurre lors de l'attaque", 90),
             Attack("C4", "Cette attaque peut s'utiliser à distance (de 3 cases max) car la minibombe lance un C4 sur son adversaire ", 30),
@@ -16,7 +16,6 @@ Characters = [
             Attack("Coup de foudre", "Cette attaque electrocute une unité, vous pouvez l'utiliser à une distance de 2 case max", 20)
         ],
         abilities=[
-            Ability("Bouclier","Le mage peut ne pas recevoir des attaques car il crée un bouclier"),
             Ability("Vol", "Vous pouvez volez aléatoirement une attaque de n'importe quelle unité que vous pourrez utiliser au prochain tour UNIQUEMENT.")
         ]
         )
