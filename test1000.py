@@ -337,7 +337,7 @@ while running:
                     if elem_move is not None :       
                         if coordonate_want is not None :        
                             case_max=compte_case(coordonate_base,coordonate_want)
-                            deplacement=déplacemet_total(coordonate_base,coordonate_want)
+                            deplacement=deplacemet_total(coordonate_base,coordonate_want)
                             if case_max<=case_maxi :
                                 
                                 if detecte_obstacle(choix_joueur,lst_position_obstacle,coordonate_want)  :

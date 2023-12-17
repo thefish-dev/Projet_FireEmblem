@@ -15,42 +15,74 @@ def MAIN(choix_joueur):
     background = pygame.display.set_mode((1500, 800))
     pygame.display.set_caption("Fire emblem")
 
-    carre=element("./Images/carre.JPG",(60,60))
-    contour=element("./Images/contour.png",(700,700))
+    carre = element("./Images/carre.JPG",(60,60))
+    contour = element("./Images/contour.png",(700,700))
     fond = element("./Images/fond.png",(800,800))
 
     lst_obstacle=["./Images/rocher.png","./Images/sapin.png","./Images/arbre.png","./Images/circulation.png","./Images/chien_arthur.png"]
     for i in range (len(lst_obstacle)) :
         lst_obstacle[i]=element(lst_obstacle[i],(60,60))
 
-    lst_position_obstacle=[]
+    lst_position_obstacle = []
 
     while len(lst_position_obstacle) <5 :
         essaie=create_obstacle(choix_joueur)
-        if essaie  not in lst_position_obstacle :
+        if essaie not in lst_position_obstacle :
             lst_position_obstacle.append(essaie)
-    print(lst_position_obstacle)
-    lst_position_joueur_1=[]
-    lst_position_joueur_2=[]
+
+    lst_position_joueur_1 = []
+    lst_position_joueur_2 = []
+
     for i in range (len(choix_joueur["Joueur1"])) :
         lst_position_joueur_1.append((choix_joueur["Joueur1"][i].rect.x,choix_joueur["Joueur1"][i].rect.y))
     for i in range (len(choix_joueur["Joueur2"])) :
         lst_position_joueur_2.append((choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y))
 
+    clique_droit = 0
+    case_maxi = 4
+    choix_tour_joueur = "Joueur1"
+    fond_attaque = element("./Images/fond_attaque.png",(700,800))
+    wednesday_attack = element("./Images/mercredi.png",(120,200))
+    thing = element("./Images/the_thing.png",(40,40))
+    bulle = element("./Images/bulle.png",(170,135))
+    text_bulle = element("./Images/text_bulle.png",(120,60))
 
-    print(lst_position_joueur_1)
-    clique_droit=0
-    case_maxi=4
-    choix_tour_joueur="Joueur1"
-    fond_attaque=element("./Images/fond_attaque.png",(700,800))
-    wednesday_attack=element("./Images/mercredi.png",(120,200))
-    thing=element("./Images/the_thing.png",(40,40))
-    bulle=element("./Images/bulle.png",(170,135))
-    text_bulle=element("./Images/text_bulle.png",(120,60))
+    def move_unit(elem_move, coord_base, coord_want): # Current position, wanted position
+        global attaque
+
+        case_max=compte_case(coord_base,coord_want)
+        deplacement=deplacemet_total(coord_base,coord_want)
+
+        if case_max <= case_maxi and detecte_obstacle(choix_joueur,lst_position_obstacle,coord_want)  :
+            
+            if choix_tour_joueur=="Joueur1" :
+                if coord_base in lst_position_joueur_1 :
+                    choix_tour_joueur="Joueur2"
+                    lst_position_joueur_1=modificate_list_position(lst_position_joueur_1,coord_base,coord_want)
+                    choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement)
+                    
+                    if close_elem_of_unit(coord_want,"Joueur2",choix_joueur,1) != [] :
+                        if event.type==pygame.MOUSEBUTTONDOWN:
+                            coordonate_attack=pygame.mouse.get_pos()
+                            coordonate_attack=search_coordinate((coordonate_attack[0],coordonate_attack[1]))
+                            if coordonate_attack in (choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y) :
+                                attaque=1
+                                print("jenna")
+                        attaque=1
+
+            elif choix_tour_joueur=="Joueur2" :
+                if coord_base in lst_position_joueur_2 :
+                    choix_tour_joueur="Joueur1"
+                    lst_position_joueur_2=modificate_list_position(lst_position_joueur_2,coord_base,coord_want)
+                    choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement)
+                    if close_elem_of_unit(coord_want,"Joueur1",choix_joueur,1) != [] :                                   
+                        attaque=1
+
 
     # Musique du jeu
     pygame.mixer.music.load("sounds/fight_music.mp3")
     pygame.mixer.music.play(-1)
+
     attaque=0
     # Boucle de jeu
     running = True
@@ -59,47 +91,24 @@ def MAIN(choix_joueur):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
             if event.type == pygame.MOUSEBUTTONDOWN:  
+
                 clique_droit+=1
                 if clique_droit==1 :
                     mouse_pos_unit = pygame.mouse.get_pos()
+
                 elif clique_droit==2 :
                     clique_droit=0
-                    mouse_pose_want=pygame.mouse.get_pos()
-                    coordonate_base=search_coordinate((mouse_pos_unit[0],mouse_pos_unit[1]))              
-                    coordonate_want=search_coordinate((mouse_pose_want[0],mouse_pose_want[1]))
-                    elem_move=search_element(choix_joueur,coordonate_base)
-                    if elem_move is not None :       
-                        if coordonate_want is not None :        
-                            case_max=compte_case(coordonate_base,coordonate_want)
-                            deplacement=déplacemet_total(coordonate_base,coordonate_want)
-                            if case_max<=case_maxi :
+                    mouse_pos_want=pygame.mouse.get_pos()
 
-                                if detecte_obstacle(choix_joueur,lst_position_obstacle,coordonate_want)  :
-                                    if choix_tour_joueur=="Joueur1" :
-                                        if coordonate_base in lst_position_joueur_1 :
-                                            choix_tour_joueur="Joueur2"
-                                            lst_position_joueur_1=modificate_list_position(lst_position_joueur_1,coordonate_base,coordonate_want)
+                    coordonate_base = search_coordinate((mouse_pos_unit[0],mouse_pos_unit[1]))              
+                    coordonate_want = search_coordinate((mouse_pos_want[0],mouse_pos_want[1]))
 
+                    elem_move = search_element(choix_joueur,coordonate_base)
 
-                                            choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement)
-                                            if close_elem_of_unit(coordonate_want,"Joueur2",choix_joueur,1) != [] :
-                                                if event.type==pygame.MOUSEBUTTONDOWN:
-                                                    coordonate_attack=pygame.mouse.get_pos()
-                                                    coordonate_attack=search_coordinate((coordonate_attack[0],coordonate_attack[1]))
-                                                    if coordonate_attack in (choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y) :
-                                                        attaque=1
-                                                        print("jenna")
-
-                                                attaque=1
-                                    elif choix_tour_joueur=="Joueur2" :
-                                        if coordonate_base in lst_position_joueur_2 :
-                                            choix_tour_joueur="Joueur1"
-                                            lst_position_joueur_2=modificate_list_position(lst_position_joueur_2,coordonate_base,coordonate_want)
-
-                                            choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement)
-                                            if close_elem_of_unit(coordonate_want,"Joueur1",choix_joueur,1) != [] :                                   
-                                                attaque=1
+                    if (elem_move is not None) and (coordonate_want is not None) :  
+                        move_unit(elem_move, coordonate_base, coordonate_want)
 
 
 
