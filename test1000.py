@@ -378,9 +378,10 @@ while running:
                 coordonate_attack=pygame.mouse.get_pos()
                 coordonate_attack=search_coordinate(coordonate_attack)
                 print(coordonate_attack)
+                print(choix_tour_joueur)
                 lst=[]
                 for i in range (len(choix_joueur[choix_tour_joueur])) :
-                    lst.append((choix_joueur[choix_tour_joueur][i].rect.x,choix_joueur[choix_tour_joueur][i].rect.y))
+                    lst.append((choix_joueur[choix_autre_joueur][i].rect.x,choix_joueur[choix_autre_joueur][i].rect.y))
                 print(lst)
                 if coordonate_attack in lst :
                     print("jenna")
