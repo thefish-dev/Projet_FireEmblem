@@ -26,7 +26,7 @@ while True:
             pygame.quit()
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_a:  # Touche Entrée du pavé numérique
+            if event.key == pygame.K_KP_ENTER:  # Touche Entrée du pavé numérique
                 kp_enter_pressed = True
                 print("yy")
 

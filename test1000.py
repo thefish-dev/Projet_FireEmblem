@@ -411,8 +411,10 @@ while running:
                     can_attack=False
                     print("jenna")
                     abilities_graphique=True
+                    attaque=0
                     
-            if event.key ==pygame.K_KP_ENTER :
+            if event.key ==pygame.K_a :
+
                 print("1")
                 abilities_finish=pygame.mouse.get_pos()
                 good_abilities=0
@@ -427,20 +429,7 @@ while running:
                     print("2")
                     abilities_graphique=False
 
-                        
-
-                        
-                    
-    
-        
-            
-
-
-
-
-
-                                        
-                                         
+                                                          
                 
                 
     background.fill((0,0,0))  # Remplir l'écran avec une couleur de fond
@@ -482,6 +471,7 @@ while running:
 
 
     if abilities_graphique==True :
+        
         background.blit(fond_abilities,(800,0))
         background.blit(text_abilities,(820,45))
         stock_abilities=search_element(choix_joueur,coordonate_attack)
