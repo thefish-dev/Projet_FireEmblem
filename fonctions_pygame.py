@@ -19,6 +19,7 @@ class Elem_Graphique(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = position_x # Position initiale x
         self.rect.y = position_y  # Position initiale y
+        
     
     def droite (self) :
         if self.rect.x<640 :
@@ -89,10 +90,26 @@ def supprimer_élement(choix_joueur,joueur,coordonnée) :
 def search_element(choix_joueur,coordonnée) :
     for i in range(len(choix_joueur["Joueur1"])) :
         if (choix_joueur["Joueur1"][i].rect.x,choix_joueur["Joueur1"][i].rect.y)==coordonnée :
-            return i,"Joueur1"
+            return (i,"Joueur1")
         elif (choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y)==coordonnée :
-            return i,"Joueur2"
+            return (i,"Joueur2")
     return None 
+def corespondance(choix_joueur,place_joueur) :
+    if choix_joueur[place_joueur[1]][place_joueur[0]].chemin=="./Images/bombe.png" :
+        return ("unit1","bombe")
+    elif choix_joueur[place_joueur[1]][place_joueur[0]].chemin=="./Images/mage.png" :
+        return ("unit1","mage")
+    elif choix_joueur[place_joueur[1]][place_joueur[0]].chemin=="./Images/singe.png" :
+        return ("unit2","singe")
+    elif choix_joueur[place_joueur[1]][place_joueur[0]].chemin=="./Images/dustin_poirier.png" :
+        return ("unit2","dustin_poirier")
+    elif choix_joueur[place_joueur[1]][place_joueur[0]].chemin=="./Images/serpent.png" :
+        return ("unit3","serpent")
+    elif choix_joueur[place_joueur[1]][place_joueur[0]].chemin=="./Images/stone.png" :
+        return ("unit3","stone")
+    
+    
+    
 
 #verifie dans quele carré le joueur clique
 def search_coordinate(coordonate) :
@@ -218,6 +235,8 @@ def affiche_attaque(perso,unit) :
 
     return [image_text,image_text2,image_text3,image_text4,image_text5]
 
+
+
 def affiche_abillities (perso,unit) :
     demande_perso = pygame.font.SysFont("monospace",12)
     colors = {
@@ -233,17 +252,17 @@ def affiche_abillities (perso,unit) :
     if perso=="unit1" and unit=="mage" :
         image_text=demande_perso.render("Au prochain tour vous attaqerez avec une attaque aléatoire",True,colors["blue"])
         image_text2=demande_perso.render("que vous volez à une unité",True,colors["blue"])
-    if perso =="uit2" and unit == "dustin_poirier" :
-        image_text=None
-        image_text2=None
+    if perso =="unit2" and unit == "dustin_poirier" :
+        image_text=demande_perso.render("Dustin Poirier n'a aucune abilité, c'est un combattant orpére, ",True,colors["blue"])
+        image_text2=demande_perso.render("Mais il n'a pas de pouvoir magique",True,colors["blue"])
     if perso == "unit2"  and unit == "singe" :
-        image_text=None
-        image_text2=None
+        image_text=demande_perso.render("Ce gros singe aves ses chicos n'a aucune abilité, ET OUAIS",True,colors["blue"])
+        image_text2=demande_perso.render("",True,colors["blue"])
     if perso == "unit3" and unit== "stone" :
         image_text=demande_perso.render("Stone est capale de protéger l'une de vos unité pour la ",True,colors["blue"])
         image_text2=demande_perso.render("prochaine fois que cette derniere ce fera attaquer",True,colors["blue"])
     if perso== "unit3" and unit == "serpent" :
-        image_text=demande_perso.render("Serpent est doté d'une agilité deconsertante, il peut")
+        image_text=demande_perso.render("Serpent est doté d'une agilité deconsertante, il peut",True,colors["blue"])
         image_text2=demande_perso.render("alors esquiver des attaques, mais pas tout le TEMPS !",True,colors["blue"])
     return [image_text,image_text2]
 

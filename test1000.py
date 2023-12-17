@@ -3,6 +3,7 @@ from pygame import *
 import sys
 from random import randint
 from fonctions_pygame import *
+from packages.Unit import *
 
 
 
@@ -18,6 +19,8 @@ class Elem_Graphique(pygame.sprite.Sprite):
         self.rect.x = position_x # Position initiale x
         self.rect.y = position_y  # Position initiale y
         self.position_elem=(self.rect.x,self.rect.y)
+        self.chemin=chemin
+       
     
     def droite (self) :
         if self.rect.x<640 :
@@ -109,6 +112,8 @@ text_erreur='Equipe déja choisit par le joueur 1'
 text_erreur_f=''
 affichage_text_erreur_joueur=False
 
+text_abilities=description.render("Votre joueur adverse peut utiliser une de ses abillités pour se défendre :",True,colors["white"])
+
 
 
 
@@ -121,6 +126,7 @@ stone=element("./Images/stone.png",(80,80))
 dustin_poirier=element("./Images/dustin_poirier.png",(80,80))
 singe=element("./Images/singe.png",(80,80))
 wednesday=element("./Images/wednesday.png",(100,150))
+can_attack=False
 
 unit1_position=[(100,100),(160,100),(400,100),(580,100),(640,100),(340,160),(400,160)]
 unit_position2=[(100,640),(160,640),(400,640),(580,640),(640,640),(340,580),(400,580)]
@@ -307,10 +313,16 @@ running_attack=True
 changement_joueur=False
 fond_attaque=element("./Images/fond_attaque.png",(700,800))
 wednesday_attack=element("./Images/mercredi.png",(120,200))
+fond_abilities=element("./Images/fond_abilités.png",(700,800))
 thing=element("./Images/the_thing.png",(40,40))
 bulle=element("./Images/bulle.png",(170,135))
 text_bulle=element("./Images/text_bulle.png",(120,60))
+hyde=element("./Images/hyde.png",(700,800))
+sang=element("./Images/sang.png",(150,100))
+text_hyde=element("./Images/text_hyde.png",(140,40))
+bulle2=element("./Images/bulle.png",(240,190))
 attack_time=0
+abilities_graphique=False
 
 # Musique du jeu
 pygame.mixer.music.load("sounds/fight_music.mp3")
@@ -384,7 +396,46 @@ while running:
                     lst.append((choix_joueur[choix_autre_joueur][i].rect.x,choix_joueur[choix_autre_joueur][i].rect.y))
                 print(lst)
                 if coordonate_attack in lst :
+                    can_attack=True
+        elif event.type==pygame.KEYDOWN :
+            if event.key==pygame.K_SPACE :
+                if can_attack :
+                    attack_finish=pygame.mouse.get_pos()
+                    
+                    if 810 <= attack_finish[0] <= 870 and \
+                    100 <= attack_finish[1] <= 130 :
+                        print("1")
+                    elif 810 <= attack_finish[0] <= 870 and \
+                    200 <= attack_finish[1] <= 230 :
+                        print("2")
+                    can_attack=False
                     print("jenna")
+                    abilities_graphique=True
+                    
+            if event.key ==pygame.K_KP_ENTER :
+                print("1")
+                abilities_finish=pygame.mouse.get_pos()
+                good_abilities=0
+                if 807 <= attack_finish[0] <= 867 and \
+                    200 <= attack_finish[1] <= 230 :
+                    good_abilities=1
+                if corespondance(choix_joueur,stock_abilities)[1]!="dustin_poirier" or corespondance(choix_joueur,stock_abilities)[1]!="singe" :
+                    if 807 <= attack_finish[0] <= 867 and \
+                    270 <= attack_finish[1] <= 300 :
+                        good_abilities=1
+                if good_abilities==1 :
+                    print("2")
+                    abilities_graphique=False
+
+                        
+
+                        
+                    
+    
+        
+            
+
+
 
 
 
@@ -405,9 +456,15 @@ while running:
         background.blit(choix_joueur["Joueur2"][i].image,(choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y))
     for i in range (len(lst_obstacle)) :
         background.blit(lst_obstacle[i],(lst_position_obstacle[i][0],lst_position_obstacle[i][1]))
+    if attaque==0 and abilities_graphique== False :
+        print("pol")
+        background.blit(hyde,(800,0))
+        background.blit(bulle2,(1255,220))
+        background.blit(sang,(1300,250))
+        background.blit(text_hyde,(1310,285))
+
     if attaque==1 :
         
-        pygame.draw.rect(background, (0,0,0), (800, 0, 700, 800))
         background.blit(fond_attaque,(800,0))
         background.blit(wednesday_attack,(900,600))
         background.blit(thing,(1150,560))
@@ -415,9 +472,35 @@ while running:
         background.blit(text_bulle,(1000,510))
         pygame.draw.rect(background, (255,0,0), (810, 100, 60, 30))
         pygame.draw.rect(background, (0,255,0), (810, 200, 60, 30)) 
+        a=search_element(choix_joueur,coordonate_want)
         for i in range (5) :
-            background.blit(affiche_attaque(unit_chose,lst_perso_attack[unit_chose][1])[i],position_attaque[i])
+            background.blit(affiche_attaque(corespondance(choix_joueur,a)[0],corespondance(choix_joueur,a)[1])[i],position_attaque[i])
         health_bar(background,choix_joueur,choix_tour_joueur)
+        if abilities_graphique==True :
+            attaque=0
+
+
+
+    if abilities_graphique==True :
+        background.blit(fond_abilities,(800,0))
+        background.blit(text_abilities,(820,45))
+        stock_abilities=search_element(choix_joueur,coordonate_attack)
+        print(stock_abilities)
+        pygame.draw.rect(background,(100,0,90),(807,200,60,30))
+        
+        print(corespondance(choix_joueur,stock_abilities)[0])
+        print(corespondance(choix_joueur,stock_abilities)[1])
+        if corespondance(choix_joueur,stock_abilities)[1]!="dustin_poirier" or corespondance(choix_joueur,stock_abilities)[1]!="singe" :
+            pygame.draw.rect(background,(100,200,0),(807,270,60,30))
+
+        print(position_attaque)
+        for i in range(2) :
+            background.blit(affiche_abillities(corespondance(choix_joueur,stock_abilities)[0],corespondance(choix_joueur,stock_abilities)[1])[i],position_attaque[3+i])
+    
+        
+            
+
+
         
 
 
