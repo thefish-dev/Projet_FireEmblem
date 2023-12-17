@@ -380,9 +380,9 @@ while running:
                 print(coordonate_attack)
                 lst=[]
                 for i in range (len(choix_joueur[choix_tour_joueur])) :
-                    print(choix_joueur[choix_tour_joueur][i].rect.x,choix_joueur[choix_tour_joueur][i].rect.y)
+                    lst.append((choix_joueur[choix_tour_joueur][i].rect.x,choix_joueur[choix_tour_joueur][i].rect.y))
                 print(lst)
-                if coordonate_attack in (choix_joueur[choix_tour_joueur][i].rect.x,choix_joueur[choix_tour_joueur][i].rect.y-60) :
+                if coordonate_attack in lst :
                     print("jenna")
 
 
