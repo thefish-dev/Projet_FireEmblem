@@ -117,7 +117,7 @@ def compte_case(coordonnée_base,transform) :
     y_totlal=(transform[1]- coordonnée_base[1])/60
     return (valeur_absolue(x_total)+valeur_absolue(y_totlal))
 
-def déplacemet_total(coordonnée_base,transform) :
+def deplacemet_total(coordonnée_base,transform) :
     x_total=(transform[0]- coordonnée_base[0])/60
     y_totlal=(transform[1]- coordonnée_base[1])/60
     return (x_total,y_totlal)

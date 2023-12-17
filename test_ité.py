@@ -212,7 +212,7 @@ while running:
                 coordonate_want=search_coordinate2((mouse_pose_want[0],mouse_pose_want[1]))
                 if coordonate_base==((elem[0].rect.x,elem[0].rect.y)) :               
                     case_max=compte_case(coordonate_base,coordonate_want)
-                    deplacement=déplacemet_total(coordonate_base,coordonate_want)
+                    deplacement=deplacemet_total(coordonate_base,coordonate_want)
                     if case_max<=case_maxi :
                         elem[0]=modificate_place(elem[0],deplacement)
         elif event.type == pygame.KEYDOWN:

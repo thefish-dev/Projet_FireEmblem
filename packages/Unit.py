@@ -23,6 +23,8 @@ class Unit:
     def set_team(self, team):
         self.team = team
 
+    # Modifie la vie de l'unité (suite à une attaque ou une abilité de soin). 
+    # Utilisation de clamp() pour être sûr que la vie ne soit ni supérieure à 100%, ni inférieure à 0.
     def modify_health(self, modification: int):
         self.health += round(modification)
         self.health = max(min(self.health, self.__maxHealth), 0) # Equivalent de clamp(valeur, min, max)
@@ -31,35 +33,53 @@ class Unit:
     def is_alive(self):
         return self.health > 0
     
+    # Attaque une unité et renvoie un tuple avec le score et un message à afficher
     def attack(self, target, attack: Attack):
+
         if not self.is_alive(): 
             return (0, "L'unité est morte")
+        
+        # Bouclier suite à une abilité appliquée sur cette cible
         if target.shield > 0:
             target.shield -= 1
             return (0, f"Cette unité est protégée par un bouclier, votre attaque ne lui a rien fait. Son bouclier a désormait {target.shield} de résistance.")
         
+        # Abilité appliquée sur votre unité l'empêchant d'attaquer
         if self.can_attack > 0:
             self.can_attack -= 1
             return (0,"Votre unité n'est pas capable d'attaquer." + "Elle pourra attaquer de nouveau au prochain tour." if self.can_attack == 0 else "")
         
+        # Attaque mortelle pour son utilisateur (notamment pour l'unité Minibombe)
+        if attack.sacrifice == True:
+            self.health = 0
+
         damages = attack.damages
+        # Coup critique
         if randint(0,1) <= attack.critic_damage_chance: 
-            damages *= attack.critic_damage_multiplier # Application du multiplicateur en fonction de sa probabilité
+            damages *= attack.critic_damage_multiplier
 
         target.modify_health( -damages )
 
+        # Calcul du score
         score = 1
-        if damages > attack.damages: score += 1
+        if damages > attack.damages: score += 1 # Coup critique
         if not target.is_alive(): score += 2
 
-        return (score, f"{-damages} de dégats!" + f"Vous avez achevé {target.name}!" if not target.is_alive() else "")
+        # Message à afficher
+        msg = f"{-damages} de dégats! "
+        if not target.is_alive(): msg += f"Vous avez achevé {target.name}! "
+        if attack.sacrifice == True: msg += "Vous y avez cependant laissé la vie."
+
+        return (score, msg)
 
     def use_ability(self, target, ability: Ability):
-        return ability.Run(self, target) 
+        return ability.Run(self, target) # Résultat sous forme de str
         
+    # Renvoie le pourcentage de santé restante
     def get_health(self):
         return int((self.health / self.__maxHealth) * 100)
 
+    # Renvoir une moyenne de la puissance de toutes ses attaques
     def get_power(self):
         power = 0
         medium = 0

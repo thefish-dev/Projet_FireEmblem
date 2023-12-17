@@ -1,79 +1,154 @@
-
 import pygame
+from pygame import *
+import sys
+from random import randint
+from fonctions_pygame import *
 
-# pygame setup
-pygame.init()
-screen = pygame.display.set_mode((800,800))
-pygame.display.set_caption('Fire emblem')
-clock = pygame.time.Clock()
-demande = pygame.font.SysFont("monospace",20)
+import acceuil
 
-# Constants
-colors = {
-    "blue" : (0,255,255),
-    "red" : (255,0,0)
-}
-deplacement = 57
+def MAIN(choix_joueur):
 
-# Components
-image_text = demande.render('Déplacer vous avec les fléches', 1, colors["blue"])
+    pygame.init()
 
-msg_depart=demande.render('deplacer vous', True, colors["blue"])
-contour = pygame.image.load("./Images/contour.PNG")
-contour = contour.convert_alpha()
-contour = pygame.transform.scale(contour,(700,700))
+    # Définition de la taille de la fenêtre
 
-picture = pygame.image.load("./Images/Cadrillage.PNG")
-picture = picture.convert_alpha()
-picture = pygame.transform.scale(picture,(600,600))
+    background = pygame.display.set_mode((1500, 800))
+    pygame.display.set_caption("Fire emblem")
 
-carre = pygame.image.load("./Images/carre.JPG")
-carre = carre.convert_alpha()
-carre = pygame.transform.scale(carre,(60,60))
+    carre = element("./Images/carre.JPG",(60,60))
+    contour = element("./Images/contour.png",(700,700))
+    fond = element("./Images/fond.png",(800,800))
+
+    lst_obstacle=["./Images/rocher.png","./Images/sapin.png","./Images/arbre.png","./Images/circulation.png","./Images/chien_arthur.png"]
+    for i in range (len(lst_obstacle)) :
+        lst_obstacle[i]=element(lst_obstacle[i],(60,60))
+
+    lst_position_obstacle = []
+
+    while len(lst_position_obstacle) <5 :
+        essaie=create_obstacle(choix_joueur)
+        if essaie not in lst_position_obstacle :
+            lst_position_obstacle.append(essaie)
+
+    lst_position_joueur_1 = []
+    lst_position_joueur_2 = []
+
+    for i in range (len(choix_joueur["Joueur1"])) :
+        lst_position_joueur_1.append((choix_joueur["Joueur1"][i].rect.x,choix_joueur["Joueur1"][i].rect.y))
+    for i in range (len(choix_joueur["Joueur2"])) :
+        lst_position_joueur_2.append((choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y))
+
+    clique_droit = 0
+    case_maxi = 4
+    fond_attaque = element("./Images/fond_attaque.png",(700,800))
+    wednesday_attack = element("./Images/mercredi.png",(120,200))
+    thing = element("./Images/the_thing.png",(40,40))
+    bulle = element("./Images/bulle.png",(170,135))
+    text_bulle = element("./Images/text_bulle.png",(120,60))
 
 
-class Sprite(pygame.sprite.Sprite) :
-    def __init__(self, yes_or_no) :
-        super().__init__()
+    # Musique du jeu
+    pygame.mixer.music.load("sounds/fight_music.mp3")
+    pygame.mixer.music.play(-1)
 
-player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-dt = 0
-
-def game() :
-    noir=(0,0,0)
-    blanc=(255,255,255)
-    #pygame.draw.rect(screen,noir,[rect[0],rect[1],60,60])
-
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
-        player_pos.y -= 300 * dt
-    if keys[pygame.K_s]:
-        player_pos.y += 300 * dt
-    if keys[pygame.K_a]:
-        player_pos.x -= 300 * dt
-    if keys[pygame.K_d]:
-        player_pos.x += 300 * dt
+    choix_tour_joueur = "Joueur1"
+    attaque=0
     
-running = True
-while running:
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_ESCAPE]:
-        running = False
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        
-    pygame.draw.circle(screen, colors["red"], (round(player_pos.x), round(player_pos.y)), 40)
-    game()
+    # Boucle de jeu
+    running = True
+    while running:
 
-    screen.blit(contour,(50,50))
-    for x in range(10) :
-        for y in range(10) :
-            screen.blit(carre,((100+x*60),(100+y*60)))
+        # Gestion des événements
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:  
+
+                clique_droit+=1
+                if clique_droit==1 :
+                    mouse_pos_unit = pygame.mouse.get_pos()
+
+                elif clique_droit==2 :
+                    clique_droit=0
+                    mouse_pos_want=pygame.mouse.get_pos()
+
+                    coord_base = search_coordinate((mouse_pos_unit[0],mouse_pos_unit[1]))              
+                    coord_want = search_coordinate((mouse_pos_want[0],mouse_pos_want[1]))
+
+                    elem_move = search_element(choix_joueur,coord_base)
+
+                    if (elem_move is not None) and (coord_want is not None) :  
+                        case_max=compte_case(coord_base,coord_want)
+                        deplacement=deplacemet_total(coord_base,coord_want)
+
+                        if case_max <= case_maxi and detecte_obstacle(choix_joueur,lst_position_obstacle,coord_want)  :
+                        
+                            if choix_tour_joueur=="Joueur1" :
+                                if coord_base in lst_position_joueur_1 :
+                                    choix_tour_joueur="Joueur2"
+                                    lst_position_joueur_1=modificate_list_position(lst_position_joueur_1,coord_base,coord_want)
+                                    choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement)
+
+                                    if close_elem_of_unit(coord_want,"Joueur2",choix_joueur,1) != [] :
+                                        if event.type==pygame.MOUSEBUTTONDOWN:
+                                            coordonate_attack=pygame.mouse.get_pos()
+                                            coordonate_attack=search_coordinate((coordonate_attack[0],coordonate_attack[1]))
+                                            if coordonate_attack in (choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y) :
+                                                attaque=1
+                                                print("jenna")
+                                        attaque=1
+
+                            elif choix_tour_joueur=="Joueur2" :
+                                if coord_base in lst_position_joueur_2 :
+                                    choix_tour_joueur="Joueur1"
+                                    lst_position_joueur_2=modificate_list_position(lst_position_joueur_2,coord_base,coord_want)
+                                    choix_joueur[elem_move[1]][elem_move[0]]=modificate_place(choix_joueur[elem_move[1]][elem_move[0]],deplacement)
+                                    if close_elem_of_unit(coord_want,"Joueur1",choix_joueur,1) != [] :                                   
+                                        attaque=1
+
+
+
+
+        background.fill((0,0,0))  # Remplir l'écran avec une couleur de fond
+        background.blit(fond,(0,0))
+        background.blit(contour,(50,50))
+
+        for i in range(10) :
+            for j in range(10) :
+                background.blit(carre,((100+j*60),(100+i*60)))
+        for i in range (len(choix_joueur["Joueur1"])) :
+            background.blit(choix_joueur["Joueur1"][i].image,(choix_joueur["Joueur1"][i].rect.x,choix_joueur["Joueur1"][i].rect.y))
+        for i in range (len(choix_joueur["Joueur2"])) :
+            background.blit(choix_joueur["Joueur2"][i].image,(choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y))
+        for i in range (len(lst_obstacle)) :
+            background.blit(lst_obstacle[i],(lst_position_obstacle[i][0],lst_position_obstacle[i][1]))
             
-    screen.blit(image_text,(220,20))
+        if attaque==1 :
+            print(unit_chose)
+            pygame.draw.rect(background, (0,0,0), (800, 0, 700, 800))
+            background.blit(fond_attaque,(800,0))
+            background.blit(wednesday_attack,(900,600))
+            background.blit(thing,(1150,560))
+            background.blit(bulle,(970,480))
+            background.blit(text_bulle,(1000,510))
+            pygame.draw.rect(background, (255,0,0), (810, 100, 60, 30))
+            pygame.draw.rect(background, (0,255,0), (810, 200, 60, 30)) 
 
-    pygame.display.flip()
-    dt = clock.tick(60) / 1000
+            for i in range (5) :
+                background.blit(affiche_attaque(unit_chose,lst_perso_attack[unit_chose][1])[i],position_attaque[i])
 
-pygame.quit()
+
+
+
+
+
+        # Mettre à jour l'affichage
+        pygame.display.flip()
+
+    # Quitter Pygame
+    pygame.quit()
+
+    sys.exit()
+
+MAIN(acceuil.MAIN())
