@@ -45,6 +45,8 @@ class Elem_Graphique(pygame.sprite.Sprite):
         return var
     def __str__(self) -> str:
         return super().__str__()
+    
+    
 #Position des text attaques et abillités pour les afficher au bonne endroit
 position_attaque=[(980,40),(870,100),(870,115),(870,200),(870,215)]
 position_abilities=[(870,200),(870,215),(870,270),(870,285)]

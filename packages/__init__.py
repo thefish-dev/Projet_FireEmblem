@@ -5,3 +5,4 @@ from .Ability import Ability
 from .Character import Character
 from .Unit import Unit
 from .Game import Game
+from .Sprite import Sprite

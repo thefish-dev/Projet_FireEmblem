@@ -4,8 +4,9 @@ from .Ability import Ability
 from random import randint
 
 class Unit:
-    def __init__(self, name: str, unitType: str, maxHealth: int, maxDistance: int, attacks: list, abilities: (list or None)):
+    def __init__(self, name: str, image: str, unitType: str, maxHealth: int, maxDistance: int, attacks: list, abilities: (list or None)):
         self.name = name
+        self.image = image
         self.type = unitType
         self.__maxHealth = maxHealth
         self.attacks = attacks
