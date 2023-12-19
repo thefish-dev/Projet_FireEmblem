@@ -57,7 +57,3 @@ Characters = [
         )
     ])
 ]
-
-
-character = Characters[0]
-nom_attaque = character.units[0].attacks[0].name
