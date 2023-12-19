@@ -139,6 +139,8 @@ unit_position2=[(100,640),(160,640),(400,640),(580,640),(640,640),(340,580),(400
 
 
 #List de unités en fonctions du perssonnage choisit
+
+# Remplacer par la class Sprite et faire une unique boucle en utilisant l'attribut unité qui aura un attribut image.
 joueur1_unit1=[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/bombe.png") for i in range (5)]+[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/mage.png") for i in range (5,7)]
 
 joueur1_unit2=[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/singe.png") for i in range (4)]+[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/dustin_poirier.png") for i in range (4,7)]
