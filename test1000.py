@@ -1,5 +1,4 @@
-import pygame
-from pygame import *
+import pygame as pg
 import sys
 from random import randint
 from fonctions_pygame import *
@@ -10,10 +9,10 @@ from packages.Unit import *
 
 
 # Initialisation de Pygame
-pygame.init()
+pg.init()
 
 #Class pour les élements interactif homme machine
-class Elem_Graphique(pygame.sprite.Sprite):
+class Elem_Graphique(pg.sprite.Sprite):
     def __init__(self,position_x,position_y,chemin):
         super().__init__()
         self.image= element(chemin,(60,60))
@@ -58,8 +57,8 @@ choix_joueur= {
 }
 
 #Création de la fenétre
-screen = pygame.display.set_mode((800, 800))
-pygame.display.set_caption("Fire emblem")
+screen = pg.display.set_mode((800, 800))
+pg.display.set_caption("Fire emblem")
 
 #Dictionnaire avec les couleurs
 colors = {
@@ -71,18 +70,18 @@ colors = {
 }
 #Fonction pour charger les images plus rapidement
 def element(chemin,tall) :       
-        var=pygame.image.load(chemin)
+        var=pg.image.load(chemin)
         var=var.convert_alpha()
-        var=pygame.transform.scale(var,tall)
+        var=pg.transform.scale(var,tall)
         return var
 
 
 #Differente police utilisé 
-description = pygame.font.SysFont("monospace",15)
-affichage=pygame.font.SysFont("chemin_vers_ta_police_en_gras.ttf",50)
-affichage_erreur=pygame.font.SysFont("chemin_vers_ta_police_en_gras.ttf",30)
-demande_perso = pygame.font.SysFont("monospace",30)
-text=pygame.font.SysFont("monospace",25)
+description = pg.font.SysFont("monospace",15)
+affichage=pg.font.SysFont("chemin_vers_ta_police_en_gras.ttf",50)
+affichage_erreur=pg.font.SysFont("chemin_vers_ta_police_en_gras.ttf",30)
+demande_perso = pg.font.SysFont("monospace",30)
+text=pg.font.SysFont("monospace",25)
 
 #Question de choix des joueurs
 image_text = demande_perso.render('Joueur 1 :choisissez votre personnage ', True, colors["blue"])
@@ -162,19 +161,19 @@ lst_perso=[bombe,mage,singe,dustin_poirier,stone,serpent]
 perso_x_y=[(110,540),(200,540),(320,540),(420,540),(530,540),(630,540)]
 
 # Musique du menu
-pygame.mixer.music.load ("sounds/menu.mp3") 
-pygame.mixer.music.play(-1)
+pg.mixer.music.load ("sounds/menu.mp3") 
+pg.mixer.music.play(-1)
 
 # Boucle de jeu
 running = True
 while running:
     # Evénements
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
             running = False
         #Detecte si la souris est sur le rectangle Unit1
-        if event.type == pygame.MOUSEBUTTONDOWN:  
-            mouse_pos = pygame.mouse.get_pos()  
+        if event.type == pg.MOUSEBUTTONDOWN:  
+            mouse_pos = pg.mouse.get_pos()  
             if 100 <= mouse_pos[0] <= 300 and \
                430 <= mouse_pos[1] <= 630 :
                 
@@ -222,33 +221,33 @@ while running:
     screen.blit(fond_acceuil,(0,0))
     screen.blit(wednesday,(100,650))
 
-    pygame.draw.rect(screen, (0,100,0), (100, 430, 200, 100))
+    pg.draw.rect(screen, (0,100,0), (100, 430, 200, 100))
     screen.blit(print_unit1,(152,465))
-    pygame.draw.rect(screen, (0,100,0), (100, 530, 200, 100),3)
+    pg.draw.rect(screen, (0,100,0), (100, 530, 200, 100),3)
 
-    pygame.draw.rect(screen, (150,0,0), (310, 430, 200, 100))
+    pg.draw.rect(screen, (150,0,0), (310, 430, 200, 100))
     screen.blit(print_unit2,(355,465))
-    pygame.draw.rect(screen, (150,0,0), (310, 530, 200, 100),3)  
+    pg.draw.rect(screen, (150,0,0), (310, 530, 200, 100),3)  
 
-    pygame.draw.rect(screen, (0,0,255), (520, 430, 200, 100))
+    pg.draw.rect(screen, (0,0,255), (520, 430, 200, 100))
     screen.blit(print_unit3,(570,465))
-    pygame.draw.rect(screen, (0,0,255), (520, 530, 200, 100),3)
+    pg.draw.rect(screen, (0,0,255), (520, 530, 200, 100),3)
 
     if choix_joueur_1 :
         screen.blit(image_text,(50,100))
     if choix_joueur_2 :
         screen.blit(image_text2,(50,100))
 
-    pygame.draw.rect(screen, (0,100,0), (10, 205, 70, 30))
+    pg.draw.rect(screen, (0,100,0), (10, 205, 70, 30))
     screen.blit(Unit1_description,(90,200))
     screen.blit(Unit1_p_2,(90,220))
     
 
-    pygame.draw.rect(screen, (150,0,0), (10, 270, 70, 30))
+    pg.draw.rect(screen, (150,0,0), (10, 270, 70, 30))
     screen.blit(Unit2_descripion,(90,265))
     screen.blit(Unit2_descripion_p_2,(90,285))
 
-    pygame.draw.rect(screen, (0,0,255), (10, 335, 70, 30))
+    pg.draw.rect(screen, (0,0,255), (10, 335, 70, 30))
     screen.blit(Unit3_descripion,(90,330))
     screen.blit(Unit3_descripion_p_2,(90,350))   
 
@@ -256,7 +255,7 @@ while running:
          screen.blit(lst_perso[i],perso_x_y[i])
     #Affichage d'un text temporaire d'erreur
     if temp_final!=0 :        
-        temp_actuel=pygame.time.get_ticks()
+        temp_actuel=pg.time.get_ticks()
         screen.blit(text_erreur_joueur,(250,700))
 
     if temp_final<temp_actuel :
@@ -267,11 +266,11 @@ while running:
         running=False
 
     # Mettre à jour l'affichage
-    pygame.display.flip()
+    pg.display.flip()
     
 
-# Quitter Pygame
-pygame.quit()
+# Quitter pg
+pg.quit()
 
 # Musique du menu
 
@@ -280,12 +279,12 @@ pygame.quit()
 
 playing=True 
 
-pygame.init()
+pg.init()
 
 
 #Création de la fenetre jeu
-background = pygame.display.set_mode((1500, 800))
-pygame.display.set_caption("Fire emblem")
+background = pg.display.set_mode((1500, 800))
+pg.display.set_caption("Fire emblem")
 
 carre=element("./Images/carre.JPG",(60,60))
 contour=element("./Images/contour.png",(700,700))
@@ -341,20 +340,20 @@ bulle2=element("./Images/bulle.png",(240,190))
 
 
 # Musique du jeu
-pygame.mixer.music.load("sounds/fight_music.mp3")
-pygame.mixer.music.play(-1)
+pg.mixer.music.load("sounds/fight_music.mp3")
+pg.mixer.music.play(-1)
 
 # Boucle de jeu
 running = True
 while running:
     # Gestion des événements
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    for event in pg.event.get():
+        if event.type == pg.QUIT:
             running = False
         #Si on touche à un boutton de la souris
-        if event.type == pygame.MOUSEBUTTONDOWN: 
+        if event.type == pg.MOUSEBUTTONDOWN: 
             #Si l'on appuie sur le clique gauche de la souris 
-            if event.button==pygame.BUTTON_LEFT :
+            if event.button==pg.BUTTON_LEFT :
             #On demande au joueur de cliquer sur l'unité qu'il veut déplacer, s'il s'agit d'une de ses unité, alors il peut la déplacer
             #si la distance entre ses coordonnée de base et el les coordonnées voulu sont inferieur ou égale au déplacement max 
             #de l'unité alors cette derniére se déplace
@@ -363,10 +362,10 @@ while running:
             #Choix_tour_joueur et choix_autre_joueur
                 clique_droit+=1
                 if clique_droit==1 :
-                    mouse_pos_unit = pygame.mouse.get_pos()
+                    mouse_pos_unit = pg.mouse.get_pos()
                 elif clique_droit==2 :
                     clique_droit=0
-                    mouse_pose_want=pygame.mouse.get_pos()
+                    mouse_pose_want=pg.mouse.get_pos()
                     coordonate_base=search_coordinate((mouse_pos_unit[0],mouse_pos_unit[1]))              
                     coordonate_want=search_coordinate((mouse_pose_want[0],mouse_pose_want[1]))
                     elem_move=search_element(choix_joueur,coordonate_base)
@@ -411,10 +410,8 @@ while running:
                                                     
             #Vérifie si l'on appuie sur le clique droit de la souris                                        
             if event.button== BUTTON_RIGHT :
-                coordonate_attack=pygame.mouse.get_pos()
+                coordonate_attack=pg.mouse.get_pos()
                 coordonate_attack=search_coordinate(coordonate_attack)
-                print(coordonate_attack)
-                print(choix_tour_joueur)
                 lst=[]
                 for i in range (len(choix_joueur[choix_tour_joueur])) :
                     lst.append((choix_joueur[choix_autre_joueur][i].rect.x,choix_joueur[choix_autre_joueur][i].rect.y))
@@ -423,13 +420,13 @@ while running:
                     print("dfhdfh")
                     can_attack=True
         #Verifie si une touche de clavier est presser
-        if event.type==pygame.KEYDOWN :
+        if event.type==pg.KEYDOWN :
             #Vérifie si la touche espace est pressée
-            if event.key==pygame.K_SPACE :
+            if event.key==pg.K_SPACE :
                 #Prend en compte les coordonnées de la souris et verifie si elle correspone à l'emplacement d'une attaque
                 #Si oui alors met la variable qui permet l'affichage des abilités sur vrai
                 if can_attack :
-                    attack_finish=pygame.mouse.get_pos()
+                    attack_finish=pg.mouse.get_pos()
                     
                     if 810 <= attack_finish[0] <= 870 and \
                     100 <= attack_finish[1] <= 130 :
@@ -442,14 +439,14 @@ while running:
                     attaque=0
             
             #Vérifie si la touche (a) du clavier est presser        
-            if event.key==pygame.K_a :
+            if event.key == pg.K_a :
                 #Prend en compte les coordonnées de la souris et verifie si elle correspone à l'emplacement d'une abilité
                 #Si oui alors met la variable qui permet l'affichage des abilités sur vrai et aprés rien du tout parce que 
                 #un membre du groupe n'a pas travailler 
 
                 print("poli")
 
-                abilities_finish=pygame.mouse.get_pos()
+                abilities_finish=pg.mouse.get_pos()
                 good_abilities=0
                 if 807 <= attack_finish[0] <= 867 and \
                     200 <= attack_finish[1] <= 230 :
@@ -508,12 +505,13 @@ while running:
         background.blit(thing,(1150,560))
         background.blit(bulle,(970,480))
         background.blit(text_bulle,(1000,510))
-        pygame.draw.rect(background, (255,0,0), (810, 100, 60, 30))
-        pygame.draw.rect(background, (0,255,0), (810, 200, 60, 30)) 
+        pg.draw.rect(background, (255,0,0), (810, 100, 60, 30))
+        pg.draw.rect(background, (0,255,0), (810, 200, 60, 30)) 
         a=search_element(choix_joueur,coordonate_want)
         for i in range (5) :
             background.blit(affiche_attaque(corespondance(choix_joueur,a)[0],corespondance(choix_joueur,a)[1])[i],position_attaque[i])
         health_bar(background,choix_joueur,choix_tour_joueur)
+
         if abilities_graphique==True :
             attaque=0
 
@@ -524,13 +522,12 @@ while running:
         background.blit(fond_abilities,(800,0))
         background.blit(text_abilities,(820,45))
         stock_abilities=search_element(choix_joueur,coordonate_attack)
-        print(stock_abilities)
-        pygame.draw.rect(background,(100,0,90),(807,200,60,30))
+        pg.draw.rect(background,(100,0,90),(807,200,60,30))
         
         print(corespondance(choix_joueur,stock_abilities)[0])
         print(corespondance(choix_joueur,stock_abilities)[1])
         if corespondance(choix_joueur,stock_abilities)[1]!="dustin_poirier" or corespondance(choix_joueur,stock_abilities)[1]!="singe" :
-            pygame.draw.rect(background,(100,200,0),(807,270,60,30))
+            pg.draw.rect(background,(100,200,0),(807,270,60,30))
 
         print(position_attaque)
         for i in range(4) :
@@ -540,9 +537,9 @@ while running:
         
     
     # Mettre à jour l'affichage
-    pygame.display.flip()
+    pg.display.flip()
 
-# Quitter Pygame
-pygame.quit()
+# Quitter pg
+pg.quit()
 
 sys.exit()
