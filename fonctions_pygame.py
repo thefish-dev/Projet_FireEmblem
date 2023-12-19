@@ -3,6 +3,7 @@ from math import *
 from pygame import *
 import pygame
 
+#list des unité qui corresspond à leur perssonnage
 lst_perso_attack={"unit1":["bombe","mage"],"unit2":["dustin_poirier","singe"],"unit3":["stone","serpent"]}
 
 #Fonction pour charger les images plus rapidement
@@ -12,6 +13,8 @@ def element(chemin,tall) :
         var=pygame.transform.scale(var,tall)
         return var
 
+
+#Classe élement graphique
 class Elem_Graphique(pygame.sprite.Sprite):
     def __init__(self,position_x,position_y,chemin):
         super().__init__()
@@ -42,11 +45,12 @@ class Elem_Graphique(pygame.sprite.Sprite):
         return var
     def __str__(self) -> str:
         return super().__str__()
-
+#Position des text attaques et abillités pour les afficher au bonne endroit
 position_attaque=[(980,40),(870,100),(870,115),(870,200),(870,215)]
-
+position_abilities=[(870,200),(870,215),(870,270),(870,285)]
+#variable test
 unit_chose="unit2"
-
+#Fonction qui detecte si le joueur essais de feinter le systéme, donc de se déplacer sur un obstacle
 def detecte_obstacle(choix_joueur,lst_obstacle,coordonnée : tuple) :
     pas_obstacle=True
     for i in range(len(choix_joueur["Joueur1"])) :
@@ -58,7 +62,7 @@ def detecte_obstacle(choix_joueur,lst_obstacle,coordonnée : tuple) :
         if coordonnée==lst_obstacle[i] :
             pas_obstacle=False
     return pas_obstacle
-
+#fonction test : detecte obstacle
 def detecte_obstacle2(choix_joueur,coordonnée : tuple) :
     pas_obstacle=True
     for i in range(len(choix_joueur["Joueur1"])) :
@@ -68,7 +72,7 @@ def detecte_obstacle2(choix_joueur,coordonnée : tuple) :
             pas_obstacle=False
     return pas_obstacle
 
-
+#Fonction qui renvoie les coordonnée d'un possible obstacle
 def create_obstacle(choix_joueur) :
     obstacle_aléatoire= [0,0]
     lst_coordonnée_possible_x=[(100+i*60) for i in range (10)]
@@ -80,13 +84,13 @@ def create_obstacle(choix_joueur) :
         if detecte_obstacle2(choix_joueur,essaie) :
             trouver_place_obstacle=False
     return essaie
-
+#fonction qui supprime un élement graphique, il le supprima alors de sa list d'affichage
 def supprimer_élement(choix_joueur,joueur,coordonnée) : 
     for i in range (len(choix_joueur[joueur])) :
-        if choix_joueur[joueur][i]==coordonnée :
+        if (choix_joueur[joueur][i].rect.x,choix_joueur[joueur][i].rect.y)==coordonnée :
             choix_joueur[joueur].pop(i)           
     return choix_joueur
-
+#Fonction qui prend en compte des coordonnées et renvoi sa place compléte dans le dictionnaire à condition que les coordonnées correspondent à une unité
 def search_element(choix_joueur,coordonnée) :
     for i in range(len(choix_joueur["Joueur1"])) :
         if (choix_joueur["Joueur1"][i].rect.x,choix_joueur["Joueur1"][i].rect.y)==coordonnée :
@@ -94,6 +98,9 @@ def search_element(choix_joueur,coordonnée) :
         elif (choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y)==coordonnée :
             return (i,"Joueur2")
     return None 
+
+#Fonction correspondance, elle permettra l'affichage des bonnes attaque de l'unité pour la fonction affiche attaquz
+#Elle prend en compte la place compléte d'une unité dans le dictionnaire choix_joueur grace a la fonction search element
 def corespondance(choix_joueur,place_joueur) :
     if choix_joueur[place_joueur[1]][place_joueur[0]].chemin=="./Images/bombe.png" :
         return ("unit1","bombe")
@@ -122,10 +129,16 @@ def search_coordinate(coordonate) :
             for j in range (len(possible_coordonate_y)) :
                 if (coordonate[0]>=possible_coordonate_x[j] and coordonate[0]< possible_coordonate_x[j]+60) and (coordonate[1]>=possible_coordonate_x[i] and coordonate[1]< possible_coordonate_x[i]+60) :
                     return (possible_coordonate_x[j],possible_coordonate_y[i])
-                
+#fonction valeur absolue                
 def valeur_absolue(a : int) :
     return abs(a)
 
+
+#Fonction qui compte le déplacement grace a des vecteurs, si l'unité monte de 3 et descent de 2, la fonction va renvoyer (3,-2)
+def deplacemet_total(coordonnée_base,transform) :
+    x_total=(transform[0]- coordonnée_base[0])/60
+    y_totlal=(transform[1]- coordonnée_base[1])/60
+    return (x_total,y_totlal)
 #utilisation des vecteurs pour savoir si l'unité est en mesure de se déplacer sur la case souhaitée : Xb - Xa)/60 pour l'abcisse 
 # (Yb-Ya)/60 pour l'ordonnée, la somme de la valeur absolue des deux  sont le nombre totale de case déplacépour connaitre le nombre totale 
 # de case déplacé, on divise par 60 car un carré fais, 60 pixels sur 60 pixels                   
@@ -134,17 +147,13 @@ def compte_case(coordonnée_base,transform) :
     y_totlal=(transform[1]- coordonnée_base[1])/60
     return (valeur_absolue(x_total)+valeur_absolue(y_totlal))
 
-def deplacemet_total(coordonnée_base,transform) :
-    x_total=(transform[0]- coordonnée_base[0])/60
-    y_totlal=(transform[1]- coordonnée_base[1])/60
-    return (x_total,y_totlal)
-
+#Fonction qui modifie l'emplacement d'une unité grace a la fonction deplacement total
 def modificate_place(elem_graphique,deplacement) :
     if ((elem_graphique.rect.x + deplacement[0]*60) >=100) and ((elem_graphique.rect.x + deplacement[0]*60) <=640) and ((elem_graphique.rect.y + deplacement[0]*60) <=640) and ((elem_graphique.rect.x + deplacement[0]*60) >=100) : 
         elem_graphique.rect.x+=deplacement[0]*60 
         elem_graphique.rect.y+=deplacement[1]*60
     return elem_graphique
-
+#Fonction test dans mes souvenirs
 def search_coordinate2(coordonate) :
     possible_coordonate_x=[(i*60) for i in range (10)]
     possible_coordonate_y=[(i*60) for i in range (10)]
@@ -155,7 +164,8 @@ def search_coordinate2(coordonate) :
             for j in range (len(possible_coordonate_y)) :
                 if (coordonate[0]>=possible_coordonate_x[j] and coordonate[0]<=possible_coordonate_x[j]+60) and (coordonate[1]<=possible_coordonate_x[i] and coordonate[1]>= possible_coordonate_x[i]+60) :
                     return (possible_coordonate_x[j],possible_coordonate_y[i])
-                
+
+#Fonction qui modifie dans la list d'affichage des unités, les changement de coordonnées des differentes unités                
 def modificate_list_position(lst_position,coordonate_base,coordonate_want) :
     lst_modificate=[]
     for i in range (len(lst_position)) :
@@ -164,7 +174,7 @@ def modificate_list_position(lst_position,coordonate_base,coordonate_want) :
         else :
             lst_modificate.append(lst_position[i])
     return lst_modificate
-
+#Fonction qui renvoie la place d'une unité dans le dictionnaire
 def search_elem_in_choix_joueur_by_coordonate(choix_joueur,coordonate) :
     lst=["Joueur1","Joueur2"]
     for j in range (len(lst)) :
@@ -173,19 +183,19 @@ def search_elem_in_choix_joueur_by_coordonate(choix_joueur,coordonate) :
                 return lst[j], i
     return None
 
-
+#Fonction qui supprime un élement de la list d'affichage des différent joueurs
 def delete_elem_graphique(choix_joueur,place_delete) :
     delete=choix_joueur[search_elem_in_choix_joueur_by_coordonate(choix_joueur,place_delete)]
     choix_joueur=choix_joueur[delete[0]].pop(delete[1])
     return choix_joueur
-
+#Fonction qui vérifie si une unité adverse est proche
 def close_elem_of_unit(coordonate,autre_joueur,choix_joueur,case_max) :
     close_elem=[]
     for i in range (len(choix_joueur[autre_joueur])) :
         if compte_case(coordonate,(choix_joueur[autre_joueur][i].rect.x,choix_joueur[autre_joueur][i].rect.y)) <=case_max :
             close_elem.append(choix_joueur[autre_joueur][i])
     return close_elem
-
+#Fonction qui affiche les attaques d'une certaine unité
 def affiche_attaque(perso,unit) :
     demande_perso = pygame.font.SysFont("monospace",14)
     colors = {
@@ -236,7 +246,7 @@ def affiche_attaque(perso,unit) :
     return [image_text,image_text2,image_text3,image_text4,image_text5]
 
 
-
+#Fonction qui affiche les abilités d'une certaine unité
 def affiche_abillities (perso,unit) :
     demande_perso = pygame.font.SysFont("monospace",12)
     colors = {
@@ -264,8 +274,10 @@ def affiche_abillities (perso,unit) :
     if perso== "unit3" and unit == "serpent" :
         image_text=demande_perso.render("Serpent est doté d'une agilité deconsertante, il peut",True,colors["blue"])
         image_text2=demande_perso.render("alors esquiver des attaques, mais pas tout le TEMPS !",True,colors["blue"])
-    return [image_text,image_text2]
-
+    image_text3=demande_perso.render("Vous n'utiliser aucune abbilités, c'est un choix qui peut",True,colors["blue"])
+    image_text4=demande_perso.render("étre judicieux mais bon je suis perssone pour juger",True,colors["blue"])
+    return [image_text,image_text2,image_text3,image_text4]
+#Fonction qui affiche la barre de vie de toutes les unités d'un joueur
 def health_bar(surface,choix_joueur,joueur) :
     position_health=[[(810,270),(900,290)],[(1010,270),(1100,290)],[(1210,270),(1300,290)],[(810,350),(900,370)],[(1010,350),(1100,370)],[(1210,350),(1300,370)],[(810,430),(900,450)]]
     for i in range (len(choix_joueur[joueur])) :

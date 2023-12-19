@@ -11,6 +11,8 @@ from packages.Unit import *
 
 # Initialisation de Pygame
 pygame.init()
+
+#Class pour les élements interactif homme machine
 class Elem_Graphique(pygame.sprite.Sprite):
     def __init__(self,position_x,position_y,chemin):
         super().__init__()
@@ -80,14 +82,18 @@ description = pygame.font.SysFont("monospace",15)
 affichage=pygame.font.SysFont("chemin_vers_ta_police_en_gras.ttf",50)
 affichage_erreur=pygame.font.SysFont("chemin_vers_ta_police_en_gras.ttf",30)
 demande_perso = pygame.font.SysFont("monospace",30)
+text=pygame.font.SysFont("monospace",25)
 
 #Question de choix des joueurs
 image_text = demande_perso.render('Joueur 1 :choisissez votre personnage ', True, colors["blue"])
 image_text2 = demande_perso.render('Joueur 2 :choisissez votre personnage ', True, colors["blue"])
 
-text_tour_1="Joueur 1 :c est a vous de jouer CHEF"
-text_tour_2="Joueur :c est a vous de jouer CHEF "
-tour_joueur1=demande_perso.render(text_tour_1, True, colors["blue"])
+
+#Text qui affiche quelle joueur doit jouer
+tour_joueur1=text.render("Joueur 1 :c est a vous de jouer CHEF", True, colors["blue"])
+tour_joueur2=text.render("Joueur 2 :c est a vous de jouer CHEF", True, colors["blue"])
+
+
 
 
 
@@ -128,9 +134,12 @@ singe=element("./Images/singe.png",(80,80))
 wednesday=element("./Images/wednesday.png",(100,150))
 can_attack=False
 
+#Position des unités à l'initialisation
 unit1_position=[(100,100),(160,100),(400,100),(580,100),(640,100),(340,160),(400,160)]
 unit_position2=[(100,640),(160,640),(400,640),(580,640),(640,640),(340,580),(400,580)]
 
+
+#List de unités en fonctions du perssonnage choisit
 joueur1_unit1=[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/bombe.png") for i in range (5)]+[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/mage.png") for i in range (5,7)]
 
 joueur1_unit2=[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/singe.png") for i in range (4)]+[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/dustin_poirier.png") for i in range (4,7)]
@@ -142,6 +151,8 @@ joueur2_unit1=[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Image
 joueur2_unit2=[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/singe.png") for i in range (4)]+[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/dustin_poirier.png") for i in range (4,7)]
 
 joueur2_unit3=[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/stone.png") for i in range (2)]+[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/serpent.png") for i in range (2,7)]
+
+#Variabe qui permettront d'afficher un text pdt un certain temps
 temp_final=0
 temp_actuel=0
 
@@ -167,7 +178,7 @@ while running:
             if 100 <= mouse_pos[0] <= 300 and \
                430 <= mouse_pos[1] <= 630 :
                 
-                #integre le choix du joueurs dans le dictionnaire correspondant
+#integre le choix du joueurs dans le dictionnaire correspondant
                 if choix_joueur["Joueur1"]==None :
                     choix_joueur["Joueur1"]=joueur1_unit1
                 else :
@@ -179,7 +190,7 @@ while running:
                 choix_joueur_2=True
             
 
-
+            
             if 310 <= mouse_pos[0] <= 510 and \
                430 <= mouse_pos[1] <= 630 :
                 if choix_joueur["Joueur1"]==None :
@@ -243,7 +254,7 @@ while running:
 
     for i in range (len(lst_perso)) :
          screen.blit(lst_perso[i],perso_x_y[i])
-
+    #Affichage d'un text temporaire d'erreur
     if temp_final!=0 :        
         temp_actuel=pygame.time.get_ticks()
         screen.blit(text_erreur_joueur,(250,700))
@@ -271,8 +282,8 @@ playing=True
 
 pygame.init()
 
-# Définition de la taille de la fenêtre
 
+#Création de la fenetre jeu
 background = pygame.display.set_mode((1500, 800))
 pygame.display.set_caption("Fire emblem")
 
@@ -284,18 +295,21 @@ fond = element("./Images/fond.png",(800,800))
  
 
     
-
+#Création d'un elist contenant les différents obstacles
 lst_obstacle=["./Images/rocher.png","./Images/sapin.png","./Images/arbre.png","./Images/circulation.png","./Images/chien_arthur.png"]
 for i in range (len(lst_obstacle)) :
     lst_obstacle[i]=element(lst_obstacle[i],(60,60))
 
 lst_position_obstacle=[]
 
+#Création d'une list qui contient des coordonnées aléatoires pour les obstacles qui sont différentes de celle des unités
 while len(lst_position_obstacle) <5 :
     essaie=create_obstacle(choix_joueur)
     if essaie  not in lst_position_obstacle :
         lst_position_obstacle.append(essaie)
 
+
+#Création des list des coordonnées des perssonnages qui permettront de les afficher au bonne endroit durant le déroulement du jeu
 lst_position_joueur_1=[]
 lst_position_joueur_2=[]
 for i in range (len(choix_joueur["Joueur1"])) :
@@ -304,7 +318,10 @@ for i in range (len(choix_joueur["Joueur2"])) :
     lst_position_joueur_2.append((choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y))
 
 
-
+#Création des variables ainsi que les élements graphiques qui nous seront necessaire pour le jeu
+attaque=0
+attack_time=0
+abilities_graphique=False
 clique_droit=0
 case_maxi=4
 choix_tour_joueur="Joueur1"
@@ -321,13 +338,12 @@ hyde=element("./Images/hyde.png",(700,800))
 sang=element("./Images/sang.png",(150,100))
 text_hyde=element("./Images/text_hyde.png",(140,40))
 bulle2=element("./Images/bulle.png",(240,190))
-attack_time=0
-abilities_graphique=False
+
 
 # Musique du jeu
 pygame.mixer.music.load("sounds/fight_music.mp3")
 pygame.mixer.music.play(-1)
-attaque=0
+
 # Boucle de jeu
 running = True
 while running:
@@ -335,8 +351,16 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONDOWN:  
+        #Si on touche à un boutton de la souris
+        if event.type == pygame.MOUSEBUTTONDOWN: 
+            #Si l'on appuie sur le clique gauche de la souris 
             if event.button==pygame.BUTTON_LEFT :
+            #On demande au joueur de cliquer sur l'unité qu'il veut déplacer, s'il s'agit d'une de ses unité, alors il peut la déplacer
+            #si la distance entre ses coordonnée de base et el les coordonnées voulu sont inferieur ou égale au déplacement max 
+            #de l'unité alors cette derniére se déplace
+            #Par la suite on vérifie si une unité adverse est assez proche pour qu'il puisse l'attaqué, si oui alors on met la variable
+            #permettant d'afficher les attaques à 1, sinon c'est au tour du joueur 2 de jouer, on fait cela grace aux variable 
+            #Choix_tour_joueur et choix_autre_joueur
                 clique_droit+=1
                 if clique_droit==1 :
                     mouse_pos_unit = pygame.mouse.get_pos()
@@ -385,8 +409,8 @@ while running:
                                                 choix_tour_joueur="Joueur1" 
                                                 choix_autre_joueur="Joueur2"                               
                                                     
-                                                    
-            elif event.button== BUTTON_RIGHT :
+            #Vérifie si l'on appuie sur le clique droit de la souris                                        
+            if event.button== BUTTON_RIGHT :
                 coordonate_attack=pygame.mouse.get_pos()
                 coordonate_attack=search_coordinate(coordonate_attack)
                 print(coordonate_attack)
@@ -396,46 +420,63 @@ while running:
                     lst.append((choix_joueur[choix_autre_joueur][i].rect.x,choix_joueur[choix_autre_joueur][i].rect.y))
                 print(lst)
                 if coordonate_attack in lst :
+                    print("dfhdfh")
                     can_attack=True
-        elif event.type==pygame.KEYDOWN :
+        #Verifie si une touche de clavier est presser
+        if event.type==pygame.KEYDOWN :
+            #Vérifie si la touche espace est pressée
             if event.key==pygame.K_SPACE :
+                #Prend en compte les coordonnées de la souris et verifie si elle correspone à l'emplacement d'une attaque
+                #Si oui alors met la variable qui permet l'affichage des abilités sur vrai
                 if can_attack :
                     attack_finish=pygame.mouse.get_pos()
                     
                     if 810 <= attack_finish[0] <= 870 and \
                     100 <= attack_finish[1] <= 130 :
-                        print("1")
-                    elif 810 <= attack_finish[0] <= 870 and \
+                        abilities_graphique=True
+                    if 810 <= attack_finish[0] <= 870 and \
                     200 <= attack_finish[1] <= 230 :
-                        print("2")
+                        abilities_graphique=True
                     can_attack=False
-                    print("jenna")
-                    abilities_graphique=True
-                    attaque=0
-                    
-            if event.key ==pygame.K_a :
 
-                print("1")
+                    attaque=0
+            
+            #Vérifie si la touche (a) du clavier est presser        
+            if event.key==pygame.K_a :
+                #Prend en compte les coordonnées de la souris et verifie si elle correspone à l'emplacement d'une abilité
+                #Si oui alors met la variable qui permet l'affichage des abilités sur vrai et aprés rien du tout parce que 
+                #un membre du groupe n'a pas travailler 
+
+                print("poli")
+
                 abilities_finish=pygame.mouse.get_pos()
                 good_abilities=0
                 if 807 <= attack_finish[0] <= 867 and \
                     200 <= attack_finish[1] <= 230 :
+
                     good_abilities=1
-                if corespondance(choix_joueur,stock_abilities)[1]!="dustin_poirier" or corespondance(choix_joueur,stock_abilities)[1]!="singe" :
-                    if 807 <= attack_finish[0] <= 867 and \
-                    270 <= attack_finish[1] <= 300 :
+                
+                if 807 <= attack_finish[0] <= 867 and \
+                270 <= attack_finish[1] <= 300 :
+                        
                         good_abilities=1
+                print(good_abilities)
                 if good_abilities==1 :
+
                     print("2")
                     abilities_graphique=False
+                    ataque=0
+            
+                    choix_tour_joueur,choix_autre_joueur=choix_autre_joueur,choix_tour_joueur
 
                                                           
                 
-                
-    background.fill((0,0,0))  # Remplir l'écran avec une couleur de fond
+    #On affiche le fond           
+    background.fill((0,0,0)) 
     background.blit(fond,(0,0))
     background.blit(contour,(50,50))
 
+    #On affiche les unités des joueurs au coordonnées respective
     for i in range(10) :
         for j in range(10) :
             background.blit(carre,((100+j*60),(100+i*60)))
@@ -443,15 +484,23 @@ while running:
         background.blit(choix_joueur["Joueur1"][i].image,(choix_joueur["Joueur1"][i].rect.x,choix_joueur["Joueur1"][i].rect.y))
     for i in range (len(choix_joueur["Joueur2"])) :
         background.blit(choix_joueur["Joueur2"][i].image,(choix_joueur["Joueur2"][i].rect.x,choix_joueur["Joueur2"][i].rect.y))
+    #On affiche les obstacles
     for i in range (len(lst_obstacle)) :
         background.blit(lst_obstacle[i],(lst_position_obstacle[i][0],lst_position_obstacle[i][1]))
+    #Si aucune attaque ni abilités n'est en cour alors on affiche un fond spécifique
     if attaque==0 and abilities_graphique== False :
-        print("pol")
         background.blit(hyde,(800,0))
         background.blit(bulle2,(1255,220))
         background.blit(sang,(1300,250))
         background.blit(text_hyde,(1310,285))
+    #On affiche quelle joueur doit jouer
+    if choix_tour_joueur=="Joueur1" :
+        background.blit(tour_joueur1,(130,20))
 
+    if choix_tour_joueur=="Joueur2" :
+        background.blit(tour_joueur2,(130,20))
+
+    #On propose les attaques de l'unité jouer
     if attaque==1 :
         
         background.blit(fond_attaque,(800,0))
@@ -469,7 +518,7 @@ while running:
             attaque=0
 
 
-
+    #On affiche les abilités du joueur adverse
     if abilities_graphique==True :
         
         background.blit(fond_abilities,(800,0))
@@ -484,19 +533,11 @@ while running:
             pygame.draw.rect(background,(100,200,0),(807,270,60,30))
 
         print(position_attaque)
-        for i in range(2) :
-            background.blit(affiche_abillities(corespondance(choix_joueur,stock_abilities)[0],corespondance(choix_joueur,stock_abilities)[1])[i],position_attaque[3+i])
-    
+        for i in range(4) :
+            background.blit(affiche_abillities(corespondance(choix_joueur,stock_abilities)[0],corespondance(choix_joueur,stock_abilities)[1])[i],position_abilities[i])
+        if attaque==1 :
+            abilities_graphique=False
         
-            
-
-
-        
-
-
-    
-    
-    
     
     # Mettre à jour l'affichage
     pygame.display.flip()
