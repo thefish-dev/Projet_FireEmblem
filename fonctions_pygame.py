@@ -85,7 +85,7 @@ def create_obstacle(choix_joueur) :
             trouver_place_obstacle=False
     return essaie
 #fonction qui supprime un élement graphique, il le supprima alors de sa list d'affichage
-def supprimer_élement(choix_joueur,joueur,coordonnée) : 
+def supprimer_element(choix_joueur,joueur,coordonnée) : 
     for i in range (len(choix_joueur[joueur])) :
         if (choix_joueur[joueur][i].rect.x,choix_joueur[joueur][i].rect.y)==coordonnée :
             choix_joueur[joueur].pop(i)           

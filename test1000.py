@@ -438,7 +438,8 @@ while running:
 
                     attaque=0
             
-            #Vérifie si la touche (a) du clavier est presser        
+            #Vérifie si la touche (a) du clavier est presser  
+                  
             if event.key == pg.K_a :
                 #Prend en compte les coordonnées de la souris et verifie si elle correspone à l'emplacement d'une abilité
                 #Si oui alors met la variable qui permet l'affichage des abilités sur vrai et aprés rien du tout parce que 
@@ -448,13 +449,13 @@ while running:
 
                 abilities_finish=pg.mouse.get_pos()
                 good_abilities=0
-                if 807 <= attack_finish[0] <= 867 and \
-                    200 <= attack_finish[1] <= 230 :
+                if 807 <= abilities_finish[0] <= 867 and \
+                    200 <= abilities_finish[1] <= 230 :
 
                     good_abilities=1
                 
-                if 807 <= attack_finish[0] <= 867 and \
-                270 <= attack_finish[1] <= 300 :
+                if 807 <= abilities_finish[0] <= 867 and \
+                270 <= abilities_finish[1] <= 300 :
                         
                         good_abilities=1
                 print(good_abilities)
@@ -465,6 +466,8 @@ while running:
                     ataque=0
             
                     choix_tour_joueur,choix_autre_joueur=choix_autre_joueur,choix_tour_joueur
+            if event.key == pg.K_b :
+                print("hello")
 
                                                           
                 
@@ -514,6 +517,8 @@ while running:
 
         if abilities_graphique==True :
             attaque=0
+        #Cette variable te renvoie l'élement qui se fait attaquer
+        
 
 
     #On affiche les abilités du joueur adverse
