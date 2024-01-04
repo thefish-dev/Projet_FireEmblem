@@ -3,48 +3,12 @@ import sys
 from random import randint
 from fonctions_pygame import *
 from packages.Unit import *
-
-
-
+from packages import *
+from Characters import Characters
 
 
 # Initialisation de Pygame
 pg.init()
-
-#Class pour les élements interactif homme machine
-class Elem_Graphique(pg.sprite.Sprite):
-    def __init__(self,position_x,position_y,chemin):
-        super().__init__()
-        self.image= element(chemin,(60,60))
-        self.rect = self.image.get_rect()
-        self.rect.x = position_x # Position initiale x
-        self.rect.y = position_y  # Position initiale y
-        self.position_elem=(self.rect.x,self.rect.y)
-        self.chemin=chemin
-       
-    
-    def droite (self) :
-        if self.rect.x<640 :
-            self.rect.x += 60
-    def gauche(self) :
-        if self.rect.x>100 :
-            self.rect.x-=60
-    def monter (self) :
-        if self.rect.y>100 :
-            self.rect.y-=60
-    def descendre (self) : 
-        if self.rect.y <640 :
-            self.rect.y+=60
-
-    def element(self,chemin,tall) :
-        var=image.load(chemin)
-        var=var.convert_alpha()
-        var=transform.scale(var,tall)
-        return var
-    
-    def __str__(self) -> str:
-        return super().__str__()
- 
 
 #Pour l'affichage du text
 choix_joueur_1=True
@@ -53,7 +17,7 @@ choix_joueur_2=False
 #Dictionnaire avec les unités choisit par les joueurs
 choix_joueur= {
      "Joueur1" : None,
-     "Joueur2" :None
+     "Joueur2" : None
 }
 
 #Création de la fenétre
@@ -70,10 +34,10 @@ colors = {
 }
 #Fonction pour charger les images plus rapidement
 def element(chemin,tall) :       
-        var=pg.image.load(chemin)
-        var=var.convert_alpha()
-        var=pg.transform.scale(var,tall)
-        return var
+    var=pg.image.load(chemin)
+    var=var.convert_alpha()
+    var=pg.transform.scale(var,tall)
+    return var
 
 
 #Differente police utilisé 
@@ -135,23 +99,22 @@ can_attack=False
 
 #Position des unités à l'initialisation
 unit1_position=[(100,100),(160,100),(400,100),(580,100),(640,100),(340,160),(400,160)]
-unit_position2=[(100,640),(160,640),(400,640),(580,640),(640,640),(340,580),(400,580)]
+unit2_position=[(100,640),(160,640),(400,640),(580,640),(640,640),(340,580),(400,580)]
 
 
 #List de unités en fonctions du perssonnage choisit
 
 # Remplacer par la class Sprite et faire une unique boucle en utilisant l'attribut unité qui aura un attribut image.
-joueur1_unit1=[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/bombe.png") for i in range (5)]+[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/mage.png") for i in range (5,7)]
 
-joueur1_unit2=[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/singe.png") for i in range (4)]+[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/dustin_poirier.png") for i in range (4,7)]
 
-joueur1_unit3=[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/stone.png") for i in range (2)]+[Elem_Graphique(unit1_position[i][0],unit1_position[i][1],"./Images/serpent.png") for i in range (2,7)]
+sprites = {}
 
-joueur2_unit1=[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/bombe.png") for i in range (5)]+[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/mage.png") for i in range (5,7)]
+for char in Characters:
+    sprites[char.name] = []
 
-joueur2_unit2=[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/singe.png") for i in range (4)]+[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/dustin_poirier.png") for i in range (4,7)]
+    for unit in char.units:
+        sprites[char.name] += [Sprite(unit, unit1_position[i][0], unit1_position[i][1], unit.image)]
 
-joueur2_unit3=[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/stone.png") for i in range (2)]+[Elem_Graphique(unit_position2[i][0],unit_position2[i][1],"./Images/serpent.png") for i in range (2,7)]
 
 #Variabe qui permettront d'afficher un text pdt un certain temps
 temp_final=0
@@ -180,8 +143,8 @@ while running:
                430 <= mouse_pos[1] <= 630 :
                 
 #integre le choix du joueurs dans le dictionnaire correspondant
-                if choix_joueur["Joueur1"]==None :
-                    choix_joueur["Joueur1"]=joueur1_unit1
+                if choix_joueur["Joueur1"] == None :
+                    choix_joueur["Joueur1"] = sprites[]
                 else :
                     if choix_joueur["Joueur1"]!= joueur1_unit1 :
                         choix_joueur["Joueur2"]=joueur2_unit1
