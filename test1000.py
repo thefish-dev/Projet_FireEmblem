@@ -6,10 +6,61 @@ from packages.Unit import *
 
 
 
+notice=True
 
+pg.init()
+# Couleurs
+
+def notice() :
+    # Création de la fenêtre
+    notice_exp = pygame.display.set_mode((1500, 800))
+    pygame.display.set_caption("Notice d'utilisation")
+    compte_notice=-1
+    notice_0=element("./Images/notice_0.png",(1500,800))
+    notice_1=element("./Images/notice_1.png",(1500,800))
+    noitce_2=element("./Images/notice_2.png",(1500,800))
+    noitce_3=element("./Images/notice_3.png",(1500,800))
+    notice_4=element("./Images/notice_4.png",(1500,800))
+    # Boucle principale
+    notice_true=True
+    while notice_true:
+        # Gestion des événements
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                notice_true = False
+            if event.type==pg.KEYDOWN :
+                if event.key==pg.K_d :
+                    compte_notice+=1
+                    if compte_notice==0 :
+                        notice_exp.blit(notice_1,(0,0))
+                    if compte_notice==1 :
+                        notice_exp.blit(noitce_2,(0,0))
+                    if compte_notice==2 :
+                        notice_exp.blit(noitce_3,(0,0))
+                    if compte_notice==3 :
+                        notice_exp.blit(notice_4,(0,0))
+                    if compte_notice==4 :
+                        notice_true=False
+                
+        if compte_notice==-1 :
+            notice_exp.blit(notice_0,(0,0))
+
+
+
+        # Dessiner ici
+
+        # Actualisation de l'écran
+        
+        # Dessiner d'autres éléments ici
+
+        pg.display.flip()
+
+# Quitter pygame
+
+notice()
 
 # Initialisation de Pygame
-pg.init()
+
 
 #Class pour les élements interactif homme machine
 class Elem_Graphique(pg.sprite.Sprite):
@@ -87,7 +138,7 @@ text=pg.font.SysFont("monospace",25)
 image_text = demande_perso.render('Joueur 1 :choisissez votre personnage ', True, colors["blue"])
 image_text2 = demande_perso.render('Joueur 2 :choisissez votre personnage ', True, colors["blue"])
 
-
+notice_txt=affichage_erreur.render("Notice",True,colors["white"])
 #Text qui affiche quelle joueur doit jouer
 tour_joueur1=text.render("Joueur 1 :c est a vous de jouer CHEF", True, colors["blue"])
 tour_joueur2=text.render("Joueur 2 :c est a vous de jouer CHEF", True, colors["blue"])
@@ -342,6 +393,8 @@ bulle2=element("./Images/bulle.png",(240,190))
 # Musique du jeu
 pg.mixer.music.load("sounds/fight_music.mp3")
 pg.mixer.music.play(-1)
+nbr_attaque=0
+nbr_abilities=0
 
 # Boucle de jeu
 running = True
@@ -431,9 +484,11 @@ while running:
                     if 810 <= attack_finish[0] <= 870 and \
                     100 <= attack_finish[1] <= 130 :
                         abilities_graphique=True
+                        nbr_attaque=1
                     if 810 <= attack_finish[0] <= 870 and \
                     200 <= attack_finish[1] <= 230 :
                         abilities_graphique=True
+                        nbr_attaque=2
                     can_attack=False
 
                     attaque=0
@@ -445,19 +500,22 @@ while running:
                 #Si oui alors met la variable qui permet l'affichage des abilités sur vrai et aprés rien du tout parce que 
                 #un membre du groupe n'a pas travailler 
 
-                print("poli")
 
                 abilities_finish=pg.mouse.get_pos()
                 good_abilities=0
                 if 807 <= abilities_finish[0] <= 867 and \
                     200 <= abilities_finish[1] <= 230 :
 
+
                     good_abilities=1
+                    nbr_abilities=1
                 
                 if 807 <= abilities_finish[0] <= 867 and \
                 270 <= abilities_finish[1] <= 300 :
+                        nbr_abilities=2
                         
                         good_abilities=1
+
                 print(good_abilities)
                 if good_abilities==1 :
 
@@ -467,7 +525,10 @@ while running:
             
                     choix_tour_joueur,choix_autre_joueur=choix_autre_joueur,choix_tour_joueur
             if event.key == pg.K_b :
-                print("hello")
+                notice_affichage=pg.mouse.get_pos()
+                if 340<=notice_affichage[0]<=460 and \
+                745<=notice_affichage[1]<=785 :
+                    notice()
 
                                                           
                 
@@ -518,11 +579,16 @@ while running:
         if abilities_graphique==True :
             attaque=0
         #Cette variable te renvoie l'élement qui se fait attaquer
+        #Ici 
+    pg.draw.rect(background,(0,0,50),(340,745,120,40))
+    background.blit(notice_txt,(365,755))
+
         
 
 
     #On affiche les abilités du joueur adverse
     if abilities_graphique==True :
+
         
         background.blit(fond_abilities,(800,0))
         background.blit(text_abilities,(820,45))
@@ -533,18 +599,93 @@ while running:
         print(corespondance(choix_joueur,stock_abilities)[1])
         if corespondance(choix_joueur,stock_abilities)[1]!="dustin_poirier" or corespondance(choix_joueur,stock_abilities)[1]!="singe" :
             pg.draw.rect(background,(100,200,0),(807,270,60,30))
+        pg.draw.rect(background,(50,50,50),(850,540,600,200))
 
         print(position_attaque)
         for i in range(4) :
             background.blit(affiche_abillities(corespondance(choix_joueur,stock_abilities)[0],corespondance(choix_joueur,stock_abilities)[1])[i],position_abilities[i])
         if attaque==1 :
             abilities_graphique=False
+        #Grace à le fonction search_elem_in_choix_joueur_by_coordonate(fonction dans laquelle tu entres des coordonnées et qui te renvoie l'emplacement
+        # de totale de l'unité dans choix_joueur)
+        # et les coordoonées  coordonate_want (coordonné de celui qui veut donner l'attaque)
+        # et coordonnate_attack (coordonnée de celui qui subit l'attaque)
+        # Par exemple si tu entres : search_elem_in_choix_joueur_by_coordonate(coordonate_want)
+        #La fonction va te renvoyer PAR EXEMPLE JE SAIS PAS : ("Joueur1",4) donc si tu entre choix_joueur(coordonante want), t'aura 
+        #tte les in formation lié a l'unité lié aux coordonnées (coordonate_want)
+        #Grace à nbr_attaque(variable qui contient 1 ou 2), tu à l'attaque utiliser, soit l'attaque 1 soit l'attaque 2 
+        #Ensuite grace a la variable coordonate_attack, tu utilise l'abilité choisit pour conter ou non l'attaque
+        #grace au truc que tu a créer l'abilité choisit est stockée dans la variable nbr_abilities
+        #Aprés tu modifies les parametres de l'unité qui se fait attaquer
+        # Et pour finir à chaque fois qu'une action se fait créer un text, je m'occuperais de l'afficher
+        #Tout sa tu le fais ici
+        
+        
+        
         
     
     # Mettre à jour l'affichage
     pg.display.flip()
 
 # Quitter pg
+    
+
+choix_joueur={"Joueur1":[],"Joueur2":["jenna"]}
+
+pygame.init()
+if choix_joueur["Joueur1"]==[] :
+    joueur="Joueur2"
+elif choix_joueur["Joueur2"]==[] :
+    joueur="Joueur1"
+
+
+
+txt=pygame.font.SysFont("monospace",13)
+txt_winner=txt.render("Et le gagnant par décision",True,(0,0,0))
+txt_winner2=txt.render(("unanime est le joueur"),True,(0,0,0))
+
+    
+end_wednesday =element("./Images/mercredi_finish.png",(200,300))
+bull=element("./Images/bulle.png",(250,150))
+end_background=element("./Images/end_fond.png",(800,800))
+
+    # Création de la fenêtre
+winner = pygame.display.set_mode((800, 800))
+pygame.display.set_caption("Winner")
+    
+
+
+
+winner_ = True
+while winner_:
+        # Gestion des événements
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+             
+             winner_ = False
+
+
+
+    winner.fill((0,0,0))  # Remplir l'écran en blanc par exemple
+        # Dessiner d'autres éléments ici
+    winner.blit(end_background,(0,0))
+    winner.blit(end_wednesday,(50,500))
+    winner.blit(bull,(200,350))
+    winner.blit(txt_winner,(220,390))
+    winner.blit(txt_winner2,(240,405))
+
+
+
+
+    pygame.display.flip()
+
+
+
+
+        
+
 pg.quit()
 
 sys.exit()
+
+
