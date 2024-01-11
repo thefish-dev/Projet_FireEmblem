@@ -1,8 +1,9 @@
 from .Unit import Unit
 
 class Character:
-    def __init__(self, name: str, units: list):
+    def __init__(self, name: str, desc: str, units: list):
         self.name = name
+        self.desc = desc
         self.units = units
         self.__score = 0
 

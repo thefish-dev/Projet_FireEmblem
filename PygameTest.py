@@ -57,9 +57,6 @@ tour_joueur1=text.render("Joueur 1 :c est a vous de jouer CHEF", True, colors["b
 tour_joueur2=text.render("Joueur 2 :c est a vous de jouer CHEF", True, colors["blue"])
 
 
-
-
-
 #Description des unités
 Unit1_description = description.render('Equipe réflechi et methodique mais Bombe est suicidaire ce qui ne fait pas la  ', True, colors["vert"])
 Unit1_p_2=description.render('fierté du puissant mage noir, un voleur capable de foudroyer ses énnemi',True, colors["vert"])
@@ -113,6 +110,7 @@ for char in Characters:
     sprites[char.name] = []
 
     for unit in char.units:
+        i = char.units.index(unit)
         sprites[char.name] += [Sprite(unit, unit1_position[i][0], unit1_position[i][1], unit.image)]
 
 
@@ -136,18 +134,20 @@ while running:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             running = False
+            
         #Detecte si la souris est sur le rectangle Unit1
         if event.type == pg.MOUSEBUTTONDOWN:  
             mouse_pos = pg.mouse.get_pos()  
+            
             if 100 <= mouse_pos[0] <= 300 and \
                430 <= mouse_pos[1] <= 630 :
                 
-#integre le choix du joueurs dans le dictionnaire correspondant
+                #integre le choix du joueurs dans le dictionnaire correspondant
                 if choix_joueur["Joueur1"] == None :
-                    choix_joueur["Joueur1"] = sprites[]
+                    choix_joueur["Joueur1"] = sprites[""]
                 else :
-                    if choix_joueur["Joueur1"]!= joueur1_unit1 :
-                        choix_joueur["Joueur2"]=joueur2_unit1
+                    if choix_joueur["Joueur1"] != joueur1_unit1 :
+                        choix_joueur["Joueur2"] = joueur2_unit1
                     else : 
                         temp_final= 3000
                 choix_joueur_1=False
